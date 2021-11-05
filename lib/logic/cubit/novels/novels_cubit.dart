@@ -8,7 +8,9 @@ part 'novels_state.dart';
 class NovelsCubit extends Cubit<NovelsState> {
   final api = API();
 
-  NovelsCubit() : super(NovelsState());
+  NovelsCubit() : super(NovelsState()) {
+    onNovelsLoad();
+  }
 
   @override
   void onChange(Change<NovelsState> change) {

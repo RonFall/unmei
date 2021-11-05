@@ -6,8 +6,11 @@ part 'news_state.dart';
 
 class NewsCubit extends Cubit<NewsState> {
   final api = API();
+  bool hasOpen = false;
 
-  NewsCubit() : super(NewsState());
+  NewsCubit() : super(NewsState()) {
+    loadData();
+  }
 
   void loadData() async {
     emit(NewsState(loading: true));

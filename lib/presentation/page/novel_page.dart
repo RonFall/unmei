@@ -19,7 +19,6 @@ class _NovelsPageState extends State<NovelsPage> {
   @override
   void initState() {
     search = TextEditingController();
-    context.read<NovelsCubit>().onNovelsLoad();
     super.initState();
   }
 

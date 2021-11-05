@@ -6,20 +6,7 @@ import 'package:unmei/presentation/widget/loader_widget.dart';
 import 'package:unmei/presentation/widget/utils_widget.dart';
 import 'package:unmei/utils.dart';
 
-class NewsPage extends StatefulWidget {
-  @override
-  State<NewsPage> createState() => _NewsPageState();
-}
-
-class _NewsPageState extends State<NewsPage> {
-  bool hasOpen = false;
-
-  @override
-  void initState() {
-    context.read<NewsCubit>().loadData();
-    super.initState();
-  }
-
+class NewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,13 +27,16 @@ class _NewsPageState extends State<NewsPage> {
           SizedBox(height: 16),
           BlocConsumer<NewsCubit, NewsState>(
             listener: (context, state) {
-              if (state.error != null) return showLoginError(context, error: state.error!);
+              if (state.error != null)
+                return showLoginError(context, error: state.error!);
             },
             builder: (context, state) {
               if (state.loading) return buildNewsItemShimmer();
-              if (state.news != null) return buildNewsItem(context: context, news: state.news);
+              if (state.news != null)
+                return buildNewsItem(context: context, news: state.news);
               return Center(
-                child: Text("Что-то пошло не так D:"),
+                child: Text("Что-то пошло не так D:",
+                    style: TextStyle(color: Colors.black)),
               );
             },
           ),
@@ -55,145 +45,135 @@ class _NewsPageState extends State<NewsPage> {
     );
   }
 
-  Widget buildNewsItem({required BuildContext context, required List<NewsData>? news}) => Expanded(
-        child: LoaderWidget(
-          indicatorColor: Color(0xFF0E4DA4),
-          onRefresh: () {
-            Future.delayed(Duration(milliseconds: 1500), () {
-              context.read<NewsCubit>().loadData();
-              news!.forEach((element) {
-                print("Title ${element.title} has ${element.shortPost.length}");
-              });
+  Widget buildNewsItem({required BuildContext context, required List<NewsData>? news}) {
+    var hasOpen = BlocProvider.of<NewsCubit>(context).hasOpen;
+    return Expanded(
+      child: LoaderWidget(
+        indicatorColor: Color(0xFF0E4DA4),
+        onRefresh: () {
+          Future.delayed(Duration(milliseconds: 1500), () {
+            context.read<NewsCubit>().loadData();
+            news!.forEach((element) {
+              print("Title ${element.title} has ${element.shortPost.length}");
             });
-          },
-          child: ListView.builder(
-            itemCount: news!.length,
-            padding: EdgeInsets.all(0),
-            itemBuilder: (context, index) {
-              var size = news[index].shortPost.length;
-              return Container(
-                margin: EdgeInsets.only(
-                  top: index == 0 ? 0 : 16,
-                  right: 16,
-                  left: 16,
-                  bottom: index == news.length - 1 ? 16 : 0,
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 2.0,
-                      spreadRadius: 2.0,
-                      offset: Offset(2.0, 2.0),
-                    )
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${news[index].title}",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+          });
+        },
+        child: ListView.builder(
+          itemCount: news!.length,
+          padding: EdgeInsets.all(0),
+          itemBuilder: (context, index) {
+            var size = news[index].shortPost.length;
+            return Container(
+              margin: EdgeInsets.only(
+                top: index == 0 ? 0 : 16,
+                right: 16,
+                left: 16,
+                bottom: index == news.length - 1 ? 16 : 0,
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 2.0,
+                    spreadRadius: 2.0,
+                    offset: Offset(2.0, 2.0),
+                  )
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${news[index].title}",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  AnimatedSize(
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeInBack,
+                    child: ConstrainedBox(
+                      constraints: hasOpen ? BoxConstraints() : BoxConstraints(maxHeight: 50.0),
+                      child: Text(
+                        "${news[index].shortPost}",
+                        softWrap: true,
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(fontSize: 12, color: Color(0xFF263238)),
                       ),
                     ),
-                    SizedBox(height: 16),
-                    AnimatedSize(
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.easeInBack,
-                      child: ConstrainedBox(
-                        constraints: hasOpen
-                            ? BoxConstraints()
-                            : BoxConstraints(maxHeight: 50.0),
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          if (size > 150) hasOpen = !hasOpen;
+                        },
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              side: BorderSide(width: 1, color: Color(0xFF0E4DA4)),
+                              borderRadius: BorderRadius.all(Radius.circular(8)),
+                            ),
+                          ),
+                          overlayColor: MaterialStateProperty.all(Color(0xFFC7DBFF)),
+                          backgroundColor: MaterialStateProperty.all(Colors.white),
+                        ),
                         child: Text(
-                          "${news[index].shortPost}",
-                          softWrap: true,
-                          overflow: TextOverflow.fade,
-                          style:
-                              TextStyle(fontSize: 12, color: Color(0xFF263238)),
+                          "Подробнее",
+                          style: TextStyle(color: Color(0xFF0E4DA4)),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            if (size > 150) {
-                              setState(() {
-                                hasOpen = !hasOpen;
-                              });
-                            }
-                          },
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                side: BorderSide(
-                                    width: 1, color: Color(0xFF0E4DA4)),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.account_circle, size: 18, color: Colors.black),
+                              SizedBox(width: 4),
+                              Text(
+                                "${news[index].author}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
                               ),
-                            ),
-                            overlayColor:
-                                MaterialStateProperty.all(Color(0xFFC7DBFF)),
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.white),
+                            ],
                           ),
-                          child: Text(
-                            "Подробнее",
-                            style: TextStyle(color: Color(0xFF0E4DA4)),
+                          Row(
+                            children: [
+                              Icon(Icons.date_range, size: 18, color: Colors.black),
+                              SizedBox(width: 4),
+                              Text(
+                                "${setDateTime(news[index].date)}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Icons.account_circle,
-                                    size: 18, color: Colors.black),
-                                SizedBox(width: 4),
-                                Text(
-                                  "${news[index].author}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.date_range,
-                                    size: 18, color: Colors.black),
-                                SizedBox(width: 4),
-                                Text(
-                                  "${setDateTime(news[index].date)}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
         ),
-      );
+      ),
+    );
+  }
 
   Widget buildNewsItemShimmer() => Expanded(
         child: ListView.builder(
@@ -206,8 +186,7 @@ class _NewsPageState extends State<NewsPage> {
               right: 16,
               bottom: index == 9 ? 16 : 0,
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16))),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
             child: Container(
               padding: EdgeInsets.all(16),
               child: Column(
