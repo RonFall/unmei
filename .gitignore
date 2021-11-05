@@ -1,4 +1,5 @@
 # Miscellaneous
+*.lock
 *.class
 *.log
 *.pyc
@@ -44,6 +45,5 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-!/.metadata
-!/analysis_options.yaml
-!/pubspec.lock
+
+/android/app/src/main/res/

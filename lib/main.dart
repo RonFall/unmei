@@ -1,19 +1,13 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:unmei/presentation/theme.dart';
 
 import 'app_route.dart';
+import 'data/hive_storage.dart';
 import 'logic/bloc/bloc_storage.dart';
 
 void main() async {
-  // await HiveStorage().init();
-  WidgetsFlutterBinding.ensureInitialized();
-  HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: await getApplicationDocumentsDirectory(),
-  );
-
+  await HiveStorage().init();
   runApp(App());
 }
 

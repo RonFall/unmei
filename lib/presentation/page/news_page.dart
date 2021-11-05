@@ -1,9 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_request_bloc/widgets/request_builder.dart';
-import 'package:unmei/data/api/API.dart';
-import 'package:unmei/data/model/app_model.dart';
 import 'package:unmei/data/model/news_model.dart';
 import 'package:unmei/logic/cubit/news/news_cubit.dart';
 import 'package:unmei/presentation/widget/loader_widget.dart';
@@ -20,6 +16,7 @@ class _NewsPageState extends State<NewsPage> {
 
   @override
   void initState() {
+    context.read<NewsCubit>().loadData();
     super.initState();
   }
 
@@ -41,29 +38,24 @@ class _NewsPageState extends State<NewsPage> {
       body: Column(
         children: [
           SizedBox(height: 16),
-          RequestBuilder<NewsCubit, dynamic>(
-            onInit: (context, state) => Text('Hello world!'),
-            onLoading: (context, state, value) => Center(child: CircularProgressIndicator()),
-            onLoaded: (context, state, value) {
-              var data = API(Dio()).convertData(cls: UserData(), data: value);
-              return Center(child: buildBody(data));
+          BlocConsumer<NewsCubit, NewsState>(
+            listener: (context, state) {
+              if (state.error != null) return showLoginError(context, error: state.error!);
             },
-            onError: (context, state, error) => Text(error!, style: TextStyle(color: Colors.black),),
+            builder: (context, state) {
+              if (state.loading) return buildNewsItemShimmer();
+              if (state.news != null) return buildNewsItem(context: context, news: state.news);
+              return Center(
+                child: Text("Что-то пошло не так D:"),
+              );
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget buildBody(UserData data) {
-    return ListTile(
-      leading: Text('${data.id}', style: TextStyle(color: Colors.black),),
-      title: Text('${data.title}', style: TextStyle(color: Colors.black),),
-      subtitle: Text('${data.completed}' , style: TextStyle(color: Colors.black),),
-    );
-  }
-
-  Widget buildNewsItem(BuildContext context, List<NewsData>? news) => Expanded(
+  Widget buildNewsItem({required BuildContext context, required List<NewsData>? news}) => Expanded(
         child: LoaderWidget(
           indicatorColor: Color(0xFF0E4DA4),
           onRefresh: () {
@@ -245,28 +237,4 @@ class _NewsPageState extends State<NewsPage> {
           ),
         ),
       );
-}
-
-class UserData extends StringResponse {
-  int? userId;
-  int? id;
-  String? title;
-  bool? completed;
-
-  UserData({
-    this.userId,
-    this.id,
-    this.title,
-    this.completed,
-  });
-
-  @override
-  fromJson(dynamic json) {
-    return UserData(
-      userId: json['userId'] as int,
-        id: json['id'] as int,
-      title: json['title'] as String,
-      completed: json['completed'] as bool,
-    );
-  }
 }

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_request_bloc/services/base.dart';
 import 'package:unmei/data/model/app_model.dart';
 
 var mapKeys = {
@@ -18,10 +17,11 @@ var mapKeys = {
   100: "Не найдено!",
 };
 
-class API extends BaseService<Dio> {
+class API {
+  final client = Dio();
   final url = "https://jsonplaceholder.typicode.com/todos/1";
 
-  API(Dio client) : super(client) {
+  API(){
     client.options = BaseOptions(
       baseUrl: url,
       headers: {
@@ -33,16 +33,8 @@ class API extends BaseService<Dio> {
     );
   }
 
-  Future<Response> getTodos() async {
-    return client.get('https://jsonplaceholder.typicode.com/todos/1');
-  }
-
-  T convertData<T extends StringResponse>({required T cls, required dynamic data}) {
-    return cls.fromJson(data);
-  }
-
   Future<T> getNetworkData<T extends DataResponse>({required T cls, required String type}) async {
-    final response = await client.get(type);
+    final response = await client.get('https://api.unmei.nix13.dev/v1/$type');
     final completer = new Completer<T>();
     if (response.statusCode == 200) {
       cls.fromJson(response.data);
