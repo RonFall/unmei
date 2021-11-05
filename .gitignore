@@ -9,6 +9,10 @@
 .buildlog/
 .history
 .svn/
+.metadata
+analysis_options.yaml
+android/app/gradlew
+android/app/gradlew.bat
 
 # IntelliJ related
 *.iml
@@ -45,5 +49,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-/android/app/src/main/res/
