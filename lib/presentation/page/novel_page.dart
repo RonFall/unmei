@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unmei/data/model/novels_model.dart';
+import 'package:unmei/logic/cubit/novels/item/novels_item_cubit.dart';
 import 'package:unmei/logic/cubit/novels/novels_cubit.dart';
+import 'package:unmei/presentation/screen/novel_screen.dart';
 import 'package:unmei/presentation/widget/loader_widget.dart';
 import 'package:unmei/presentation/widget/textfield_widget.dart';
 import 'package:unmei/presentation/widget/utils_widget.dart';
@@ -34,20 +36,26 @@ class _NovelsPageState extends State<NovelsPage> {
             bottomRight: Radius.circular(8),
           ),
         ),
-        title: Text("Новеллы", style: TextStyle(fontSize: 32, color: Colors.black)),
+        title: Text("Новеллы",
+            style: TextStyle(fontSize: 32, color: Colors.black)),
       ),
       body: Column(
         children: [
           SizedBox(height: 8),
-          TextFieldWidget(controller: search, hint: 'Новелла под названием...',),
+          TextFieldWidget(
+            controller: search,
+            hint: 'Новелла под названием...',
+          ),
           SizedBox(height: 8),
           BlocConsumer<NovelsCubit, NovelsState>(
             listener: (context, state) {
-              if (state.error != null) return showLoginError(context, error: state.error!);
+              if (state.error != null)
+                return showLoginError(context, error: state.error!);
             },
             builder: (context, state) {
               if (state.loading) return buildNovelItemShimmer();
-              if (state.novels != null) return buildNovelItem(context, state.novels);
+              if (state.novels != null)
+                return buildNovelItem(context, state.novels);
               return Center(
                 child: Text("Что-то пошло не так D:"),
               );
@@ -77,7 +85,7 @@ class _NovelsPageState extends State<NovelsPage> {
                 top: index == 0 && index == 1 ? 0 : 8,
                 left: index % 2 == 0 ? 8 : 8,
                 right: index % 2 == 0 ? 0 : 8,
-                bottom: index == novels.length - 1 && index == novels.length - 2 ? 8 : 0,
+                bottom: 8,
               ),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -93,9 +101,13 @@ class _NovelsPageState extends State<NovelsPage> {
               ),
               child: GestureDetector(
                 onTap: () {
-                  print("GOTO");
-                  // context.read(databaseNovelsProvider).initNovelsItem(index);
-                  // store.dispatch(loadNovelsItemThunk(store, novels.data![index].id));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                            value: NovelsItemCubit(),
+                            child: NovelScreen(novels[index].id)),
+                    ),
+                  );
                 },
                 child: Column(
                   children: [

@@ -43,7 +43,7 @@ class App extends StatelessWidget {
           light: lightTheme,
           dark: darkTheme,
           builder: (light, dark) => MaterialApp(
-            onGenerateRoute: AppRouter().onGenerateRoute,
+            onGenerateRoute: AppRouter.onGenerateRoute,
             theme: light,
             darkTheme: dark,
             debugShowCheckedModeBanner: false,

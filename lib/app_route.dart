@@ -5,7 +5,7 @@ import 'package:unmei/presentation/page/novel_page.dart';
 import 'package:unmei/presentation/page/settings_page.dart';
 
 class AppRouter {
-  Route onGenerateRoute(RouteSettings settings) {
+  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/news':
         return MaterialPageRoute(

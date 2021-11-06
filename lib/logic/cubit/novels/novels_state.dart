@@ -12,15 +12,3 @@ class NovelsState {
   });
 }
 
-class NovelsItemState extends NovelsState {
-  final bool loading;
-  final NovelsItemData? novel;
-  final String? error;
-
-  NovelsItemState({
-    this.loading = false,
-    this.novel,
-    this.error,
-  });
-}
-

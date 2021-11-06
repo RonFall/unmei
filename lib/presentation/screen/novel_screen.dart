@@ -1,17 +1,47 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unmei/data/model/novels_item_model.dart';
+import 'package:unmei/logic/cubit/novels/item/novels_item_cubit.dart';
 
-class NovelItemPage extends StatelessWidget {
-  final NovelsItem novel;
+class NovelScreen extends StatefulWidget {
 
-  NovelItemPage({required this.novel});
+  final int index;
+
+  const NovelScreen(this.index);
+  @override
+  State<NovelScreen> createState() => _NovelScreenState();
+}
+
+class _NovelScreenState extends State<NovelScreen> {
+
+  @override
+  void initState() {
+    context.read<NovelsItemCubit>().getNovel(widget.index);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      body: BlocConsumer<NovelsItemCubit, NovelsItemState>(
+        listener: (context, state) {
+          if (state.error != null) {
+            throw Exception(state.error);
+          }
+        },
+        builder: (context, state) {
+          if (state.loading) return Center(child: CircularProgressIndicator());
+          if (state.novel != null) return buildNovel(context, state.novel!);
+          return Center(
+            child: Text("Что-то пошло не так D:"),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget buildNovel(BuildContext context, NovelsItemData novel) => ListView(
         children: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16),
@@ -20,7 +50,7 @@ class NovelItemPage extends StatelessWidget {
               children: [
                 SizedBox(height: 16),
                 GestureDetector(
-                  // onTap: () => store.dispatch(loadNovelsThunk(store, "")),
+                  onTap: () => Navigator.of(context).pop(),
                   child: Row(
                     children: [
                       Icon(Icons.arrow_back, size: 18, color: Colors.white),
@@ -38,10 +68,11 @@ class NovelItemPage extends StatelessWidget {
                 SizedBox(height: 16),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: novel.data!.image.length > 10
-                      ? Image.network(novel.data!.image)
-                      : Image.asset("assets/images/no_image.png",
-                  ),
+                  child: novel.image.length > 10
+                      ? Image.network(novel.image)
+                      : Image.asset(
+                          "assets/images/no_image.png",
+                        ),
                 ),
                 SizedBox(height: 16),
                 Row(
@@ -51,7 +82,7 @@ class NovelItemPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          novel.data!.originalName,
+                          novel.originalName,
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -59,7 +90,7 @@ class NovelItemPage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          novel.data!.localizedName,
+                          novel.localizedName,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.white,
@@ -81,7 +112,7 @@ class NovelItemPage extends StatelessWidget {
                           Icon(Icons.star, size: 22, color: Colors.white),
                           SizedBox(width: 2),
                           Text(
-                            novel.data!.rating.toString(),
+                            novel.rating.toString(),
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -133,11 +164,12 @@ class NovelItemPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  textStyle("Год выпуска: ", "${novel.data!.releaseDate}"),
-                  genresConvert("Жанр: ", novel.data!.genres),
-                  textStyle("Продолжительность: ", "${novel.data!.duration}"),
-                  textStyle("Статус: ", "${statusConvert(novel.data!.exitStatus)}"),
-                  textStyle("Платформы: ", "${novel.data!..platforms}"),
+                  textStyle("Год выпуска: ", "${novel.releaseDate}"),
+                  genresConvert("Жанр: ", novel.genres),
+                  textStyle("Продолжительность: ", "${novel.duration}"),
+                  textStyle(
+                      "Статус: ", "${statusConvert(novel.exitStatus)}"),
+                  textStyle("Платформы: ", "${novel..platforms}"),
                 ],
               ),
             ),
@@ -176,7 +208,7 @@ class NovelItemPage extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.all(16),
               child: Text(
-                "${novel.data!.description}",
+                "${novel.description}",
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black,
@@ -186,9 +218,7 @@ class NovelItemPage extends StatelessWidget {
           ),
           SizedBox(height: 16),
         ],
-      ),
-    );
-  }
+      );
 
   Widget platformConvert(String text) {
     List<Widget> asset = [];
@@ -221,7 +251,8 @@ class NovelItemPage extends StatelessWidget {
               decoration: BoxDecoration(color: Color(0xFF9915d1)),
               child: Row(
                 children: [
-                  if (genres != null) for (var item in genres) Text(item.name),
+                  if (genres != null)
+                    for (var item in genres) Text(item.name),
                   if (genres!.length == 0) Text("-"),
                 ],
               ),
