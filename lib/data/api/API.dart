@@ -34,7 +34,7 @@ class API {
   }
 
   Future<T> getNetworkData<T extends DataResponse>({required T cls, required String type}) async {
-    final response = await client.get('https://api.unmei.nix13.dev/v1/$type');
+    final response = await client.get(type);
     final completer = new Completer<T>();
     if (response.statusCode == 200) {
       cls.fromJson(response.data);
