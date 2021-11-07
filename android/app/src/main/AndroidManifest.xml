@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="app.unmei">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
    <application
         android:label="unmei"
         android:icon="@mipmap/ic_launcher">
