@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:seafarer/seafarer.dart';
 import 'package:unmei/app/app_routes.dart';
 import 'package:unmei/data/model/novels_model.dart';
 import 'package:unmei/logic/cubit/novels/novels_cubit.dart';
@@ -98,9 +99,16 @@ class _NovelsPageState extends State<NovelsPage> {
               ),
               child: GestureDetector(
                 onTap: () {
-                  AppRouter.seafarer("/novel_screen", params: {
-                    'index': novels[index].id,
-                  });
+                  AppRouter.seafarer(
+                    "/novel_screen",
+                    transitionDuration: Duration(milliseconds: 300),
+                    transitions: [
+                      SeafarerTransition.slide_from_right,
+                    ],
+                    params: {
+                      'index': novels[index].id,
+                    },
+                  );
                 },
                 child: Column(
                   children: [
