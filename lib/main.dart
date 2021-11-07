@@ -1,12 +1,15 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unmei/presentation/page/home_page.dart';
 import 'package:unmei/presentation/theme.dart';
 
-import 'app_route.dart';
+import 'app/app_routes.dart';
 import 'data/hive_storage.dart';
 import 'logic/bloc/bloc_storage.dart';
 
 void main() async {
+  AppRouter.createRoutes();
   await HiveStorage().init();
   runApp(App());
 }
@@ -38,16 +41,20 @@ class App extends StatelessWidget {
             ),
           );
         }
-        return AdaptiveTheme(
-          initial: AdaptiveThemeMode.light,
-          light: lightTheme,
-          dark: darkTheme,
-          builder: (light, dark) => MaterialApp(
-            onGenerateRoute: AppRouter.onGenerateRoute,
-            theme: light,
-            darkTheme: dark,
-            debugShowCheckedModeBanner: false,
-            home: createBloc(),
+        return MultiBlocProvider(
+          providers: blocList,
+          child: AdaptiveTheme(
+            initial: AdaptiveThemeMode.light,
+            light: lightTheme,
+            dark: darkTheme,
+            builder: (light, dark) => MaterialApp(
+              theme: light,
+              darkTheme: dark,
+              debugShowCheckedModeBanner: false,
+              navigatorKey: AppRouter.seafarer.navigatorKey,  // important
+              onGenerateRoute: AppRouter.seafarer.generator(),
+              home: SafeArea(child: HomePage()),
+            ),
           ),
         );
       },

@@ -4,7 +4,7 @@ import 'package:unmei/data/model/news_model.dart';
 import 'package:unmei/logic/cubit/news/news_cubit.dart';
 import 'package:unmei/presentation/widget/loader_widget.dart';
 import 'package:unmei/presentation/widget/utils_widget.dart';
-import 'package:unmei/utils.dart';
+import 'package:unmei/app/utils.dart';
 
 class NewsPage extends StatelessWidget {
   @override

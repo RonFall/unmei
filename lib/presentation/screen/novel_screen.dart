@@ -1,28 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:seafarer/seafarer.dart';
 import 'package:unmei/data/model/novels_item_model.dart';
 import 'package:unmei/logic/cubit/novels/item/novels_item_cubit.dart';
 
-class NovelScreen extends StatefulWidget {
-
-  final int index;
-
-  const NovelScreen(this.index);
-  @override
-  State<NovelScreen> createState() => _NovelScreenState();
-}
-
-class _NovelScreenState extends State<NovelScreen> {
-
-  @override
-  void initState() {
-    context.read<NovelsItemCubit>().getNovel(widget.index);
-    super.initState();
-  }
+class NovelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final index = Seafarer.param<int>(context, 'index');
+    context.read<NovelsItemCubit>().getNovel(index!);
     return Scaffold(
       body: BlocConsumer<NovelsItemCubit, NovelsItemState>(
         listener: (context, state) {

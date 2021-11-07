@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unmei/app/app_routes.dart';
 import 'package:unmei/data/model/novels_model.dart';
-import 'package:unmei/logic/cubit/novels/item/novels_item_cubit.dart';
 import 'package:unmei/logic/cubit/novels/novels_cubit.dart';
-import 'package:unmei/presentation/screen/novel_screen.dart';
 import 'package:unmei/presentation/widget/loader_widget.dart';
 import 'package:unmei/presentation/widget/textfield_widget.dart';
 import 'package:unmei/presentation/widget/utils_widget.dart';
-
-import '../../utils.dart';
 
 class NovelsPage extends StatefulWidget {
   @override
@@ -101,13 +98,9 @@ class _NovelsPageState extends State<NovelsPage> {
               ),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                            value: NovelsItemCubit(),
-                            child: NovelScreen(novels[index].id)),
-                    ),
-                  );
+                  AppRouter.seafarer("/novel_screen", params: {
+                    'index': novels[index].id,
+                  });
                 },
                 child: Column(
                   children: [
