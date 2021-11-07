@@ -17,4 +17,10 @@ class NovelsItemCubit extends Cubit<NovelsItemState> {
       emit(NovelsItemState(error: error.toString()));
     });
   }
+
+  // void getNovelGenres() async {
+  //   api.getData('genres').then((resp) {
+  //
+  //   });
+  // }
 }

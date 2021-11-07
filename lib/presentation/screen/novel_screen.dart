@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:seafarer/seafarer.dart';
+import 'package:unmei/app/utils.dart';
 import 'package:unmei/data/model/novels_item_model.dart';
 import 'package:unmei/logic/cubit/novels/item/novels_item_cubit.dart';
 
@@ -21,9 +22,7 @@ class NovelScreen extends StatelessWidget {
         builder: (context, state) {
           if (state.loading) return Center(child: CircularProgressIndicator());
           if (state.novel != null) return buildNovel(context, state.novel!);
-          return Center(
-            child: Text("Что-то пошло не так D:"),
-          );
+          return Center(child: Text("Что-то пошло не так D:"));
         },
       ),
     );
@@ -45,10 +44,7 @@ class NovelScreen extends StatelessWidget {
                       SizedBox(width: 4),
                       Text(
                         "Назад",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ],
                   ),
@@ -58,9 +54,7 @@ class NovelScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   child: novel.image.length > 10
                       ? Image.network(novel.image)
-                      : Image.asset(
-                          "assets/images/no_image.png",
-                        ),
+                      : Image.asset("assets/images/no_image.png"),
                 ),
                 SizedBox(height: 16),
                 Row(
@@ -71,18 +65,11 @@ class NovelScreen extends StatelessWidget {
                       children: [
                         Text(
                           novel.originalName,
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                         Text(
                           novel.localizedName,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                          ),
+                          style: TextStyle(fontSize: 14, color: Colors.white),
                         ),
                       ],
                     ),
@@ -101,11 +88,7 @@ class NovelScreen extends StatelessWidget {
                           SizedBox(width: 2),
                           Text(
                             novel.rating.toString(),
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ],
                       ),
@@ -131,11 +114,7 @@ class NovelScreen extends StatelessWidget {
                 ),
                 child: Text(
                   "Краткая справка: ",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
             ],
@@ -144,20 +123,17 @@ class NovelScreen extends StatelessWidget {
           Card(
             elevation: 8,
             margin: EdgeInsets.symmetric(horizontal: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16)),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
             child: Container(
               margin: EdgeInsets.all(8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  textStyle("Год выпуска: ", "${novel.releaseDate}"),
-                  genresConvert("Жанр: ", novel.genres),
-                  textStyle("Продолжительность: ", "${novel.duration}"),
-                  textStyle(
-                      "Статус: ", "${statusConvert(novel.exitStatus)}"),
-                  textStyle("Платформы: ", "${novel..platforms}"),
+                  textStyle("Выпуск: ", "${setDateTime(novel.releaseDate)}"),
+                  novel.genres.isEmpty ? SizedBox() : genresConvert("Жанры: ", novel.genres),
+                  novel.duration == 0 ? SizedBox() : textStyle("Продолжительность: ", "${novel.duration}"),
+                  textStyle("Статус: ", "${statusConvert(novel.exitStatus)}"),
+                  novel.platforms.isEmpty ? SizedBox() : textStyle("Платформы: ", "${novel.platforms}"),
                 ],
               ),
             ),
@@ -177,11 +153,7 @@ class NovelScreen extends StatelessWidget {
                 ),
                 child: Text(
                   "Описание: ",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
             ],
@@ -190,17 +162,12 @@ class NovelScreen extends StatelessWidget {
           Card(
             elevation: 8,
             margin: EdgeInsets.symmetric(horizontal: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16)),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
             child: Container(
               margin: EdgeInsets.all(16),
               child: Text(
                 "${novel.description}",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.black),
               ),
             ),
           ),
@@ -210,44 +177,61 @@ class NovelScreen extends StatelessWidget {
 
   Widget platformConvert(String text) {
     List<Widget> asset = [];
-    var listTypes = ["win", "linux", "ios", "android"];
-    for (var i in listTypes)
-      asset.add(Container(
-          margin: EdgeInsets.symmetric(horizontal: 2),
-          child: SvgPicture.asset(
-            "assets/icons/platform/$i.svg",
-            height: 16,
-            color: Colors.white,
-          )));
+    var widgetMap = {
+      'win': "assets/icons/platform/win.svg",
+      'mac': "assets/icons/platform/ios.svg",
+      'linux': "assets/icons/platform/linux.svg",
+      'ios': "assets/icons/platform/ios.svg",
+      'android': "assets/icons/platform/android.svg",
+    };
+    widgetMap.forEach((platform, path) {
+      if (text.contains(platform)) {
+        asset.add(
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 2),
+            child: SvgPicture.asset(path, height: 16, color: Colors.white),
+          ),
+        );
+      }
+    });
     return Row(children: asset);
   }
 
-  genresConvert(String textMain, List<Genres>? genres) => Container(
-        margin: EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          children: [
-            Text(
-              textMain,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF155ad1),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(4),
-              decoration: BoxDecoration(color: Color(0xFF9915d1)),
-              child: Row(
-                children: [
-                  if (genres != null)
-                    for (var item in genres) Text(item.name),
-                  if (genres!.length == 0) Text("-"),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
+  Widget genresConvert(String textMain, List<Genres>? genres) {
+    String? genreName = '';
+    List<Widget> genreWidget = [];
+    var genresMap = {
+      'romantic': 'Романтика',
+      'fantasy': 'Фэнтези',
+      'horror': 'Ужасы',
+      'yaoi': 'Яой',
+      'yuri': 'Юри',
+    };
+
+    genres!.forEach((genre) {
+      var key = genre.name;
+      genreName = genresMap[key];
+      genreWidget.add(Container(
+        padding: EdgeInsets.all(4),
+        margin: EdgeInsets.only(right: 4),
+        decoration: BoxDecoration(color: Color(0xFF9915d1)),
+        child: Text(genreName!),
+      ),);
+    });
+
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Text(
+            textMain,
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF155ad1)),
+          ),
+          Row(children: genreWidget),
+        ],
+      ),
+    );
+  }
 
   String statusConvert(String text) {
     if (text == "in_developing") return "В разработке";
@@ -258,17 +242,13 @@ class NovelScreen extends StatelessWidget {
     return "";
   }
 
-  textStyle(String textMain, String textDesc) => Container(
+  Widget textStyle(String textMain, String textDesc) => Container(
         margin: EdgeInsets.symmetric(vertical: 4),
         child: Row(
           children: [
             Text(
               textMain,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF155ad1),
-              ),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF155ad1)),
             ),
             Container(
               padding: EdgeInsets.all(4),
@@ -276,11 +256,7 @@ class NovelScreen extends StatelessWidget {
               child: textMain != "Платформы: "
                   ? Text(
                       textDesc,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
                     )
                   : platformConvert(textDesc),
             ),

@@ -21,7 +21,7 @@ class API {
   final client = Dio();
   final url = "https://api.unmei.nix13.dev/v1/";
 
-  API(){
+  API() {
     client.options = BaseOptions(
       baseUrl: url,
       headers: {
@@ -33,7 +33,8 @@ class API {
     );
   }
 
-  Future<T> getNetworkData<T extends DataResponse>({required T cls, required String type}) async {
+  Future<T> getNetworkData<T extends DataResponse>(
+      {required T cls, required String type}) async {
     final response = await client.get(type);
     final completer = new Completer<T>();
     if (response.statusCode == 200) {
@@ -43,6 +44,17 @@ class API {
     } else {
       print("Error from getting Data: ${response.data}");
       throw Exception('Failed to load data');
+    }
+  }
+
+  Future getData(String type) async {
+    final response = await client.get(type);
+    try {
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+    } catch (e) {
+      return e;
     }
   }
 
