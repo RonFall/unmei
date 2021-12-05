@@ -11,7 +11,7 @@ import 'data/hive_storage.dart';
 import 'logic/bloc/bloc_storage.dart';
 
 void main() async {
-  AppRouter.createRoutes();
+  AppRouter().createRoutes();
   WidgetsFlutterBinding.ensureInitialized();
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getTemporaryDirectory(),

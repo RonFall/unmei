@@ -19,8 +19,7 @@ class NewsPage extends StatelessWidget {
             bottomRight: Radius.circular(8),
           ),
         ),
-        title: Text("Новости",
-            style: TextStyle(fontSize: 32, color: Colors.black)),
+        title: Text("Новости", style: TextStyle(fontSize: 32, color: Colors.black)),
       ),
       body: Column(
         children: [
