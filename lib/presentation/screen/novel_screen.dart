@@ -7,7 +7,6 @@ import 'package:unmei/data/model/novels_item_model.dart';
 import 'package:unmei/logic/cubit/novels/item/novels_item_cubit.dart';
 
 class NovelScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final index = Seafarer.param<int>(context, 'index');
@@ -15,9 +14,7 @@ class NovelScreen extends StatelessWidget {
     return Scaffold(
       body: BlocConsumer<NovelsItemCubit, NovelsItemState>(
         listener: (context, state) {
-          if (state.error != null) {
-            throw Exception(state.error);
-          }
+          if (state.error != null) throw Exception(state.error);
         },
         builder: (context, state) {
           if (state.loading) return Center(child: CircularProgressIndicator());
@@ -42,19 +39,14 @@ class NovelScreen extends StatelessWidget {
                     children: [
                       Icon(Icons.arrow_back, size: 18, color: Colors.white),
                       SizedBox(width: 4),
-                      Text(
-                        "Назад",
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
+                      Text("Назад", style: TextStyle(fontSize: 16, color: Colors.white)),
                     ],
                   ),
                 ),
                 SizedBox(height: 16),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: novel.image.length > 10
-                      ? Image.network(novel.image)
-                      : Image.asset("assets/images/no_image.png"),
+                  child: novel.image.length > 10 ? Image.network(novel.image) : Image.asset("assets/images/no_image.png"),
                 ),
                 SizedBox(height: 16),
                 Row(
@@ -77,10 +69,7 @@ class NovelScreen extends StatelessWidget {
                       padding: EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         color: Color(0xFFe3983d),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          bottomRight: Radius.circular(8),
-                        ),
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
                       ),
                       child: Row(
                         children: [
@@ -107,10 +96,7 @@ class NovelScreen extends StatelessWidget {
                 margin: EdgeInsets.only(left: 8),
                 decoration: BoxDecoration(
                   color: Color(0xFF155ad1),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(8),
-                    bottomLeft: Radius.circular(8),
-                  ),
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(8), bottomLeft: Radius.circular(8)),
                 ),
                 child: Text(
                   "Краткая справка: ",
@@ -146,10 +132,7 @@ class NovelScreen extends StatelessWidget {
                 margin: EdgeInsets.only(left: 8),
                 decoration: BoxDecoration(
                   color: Color(0xFFd12b15),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(8),
-                    bottomLeft: Radius.circular(8),
-                  ),
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(8), bottomLeft: Radius.circular(8)),
                 ),
                 child: Text(
                   "Описание: ",
@@ -179,7 +162,7 @@ class NovelScreen extends StatelessWidget {
     List<Widget> asset = [];
     var widgetMap = {
       'win': "assets/icons/platform/win.svg",
-      'mac': "assets/icons/platform/ios.svg",
+      // 'mac': "assets/icons/platform/mac.svg",
       'linux': "assets/icons/platform/linux.svg",
       'ios': "assets/icons/platform/ios.svg",
       'android': "assets/icons/platform/android.svg",
@@ -188,7 +171,9 @@ class NovelScreen extends StatelessWidget {
       if (text.contains(platform)) {
         asset.add(
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 2),
+            padding: EdgeInsets.all(4),
+            margin: EdgeInsets.only(right: 4),
+            decoration: BoxDecoration(color: Color(0xFF9915d1)),
             child: SvgPicture.asset(path, height: 16, color: Colors.white),
           ),
         );
@@ -211,12 +196,14 @@ class NovelScreen extends StatelessWidget {
     genres!.forEach((genre) {
       var key = genre.name;
       genreName = genresMap[key];
-      genreWidget.add(Container(
-        padding: EdgeInsets.all(4),
-        margin: EdgeInsets.only(right: 4),
-        decoration: BoxDecoration(color: Color(0xFF9915d1)),
-        child: Text(genreName!),
-      ),);
+      genreWidget.add(
+        Container(
+          padding: EdgeInsets.all(4),
+          margin: EdgeInsets.only(right: 4),
+          decoration: BoxDecoration(color: Color(0xFF9915d1)),
+          child: Text(genreName!),
+        ),
+      );
     });
 
     return Container(
@@ -250,16 +237,15 @@ class NovelScreen extends StatelessWidget {
               textMain,
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF155ad1)),
             ),
-            Container(
-              padding: EdgeInsets.all(4),
-              decoration: BoxDecoration(color: Color(0xFF9915d1)),
-              child: textMain != "Платформы: "
-                  ? Text(
-                      textDesc,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
-                    )
-                  : platformConvert(textDesc),
-            ),
+            if (textMain == "Платформы: ")platformConvert(textDesc)
+            else Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(color: Color(0xFF9915d1)),
+                child: Text(
+                  textDesc,
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+              ),
           ],
         ),
       );

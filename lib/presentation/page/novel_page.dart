@@ -34,8 +34,7 @@ class _NovelsPageState extends State<NovelsPage> {
             bottomRight: Radius.circular(8),
           ),
         ),
-        title: Text("Новеллы",
-            style: TextStyle(fontSize: 32, color: Colors.black)),
+        title: Text("Новеллы", style: TextStyle(fontSize: 32, color: Colors.black)),
       ),
       body: Column(
         children: [
@@ -43,20 +42,19 @@ class _NovelsPageState extends State<NovelsPage> {
           TextFieldWidget(
             controller: search,
             hint: 'Новелла под названием...',
+            fieldBarColor: Color(0xFFE864FB),
+            onType: (text) => context.read<NovelsCubit>().onNovelsLoad(name: text),
+            onClear: () => context.read<NovelsCubit>().onNovelsLoad(),
           ),
           SizedBox(height: 8),
           BlocConsumer<NovelsCubit, NovelsState>(
             listener: (context, state) {
-              if (state.error != null)
-                return showLoginError(context, error: state.error!);
+              if (state.error != null) return showLoginError(context, error: state.error!);
             },
             builder: (context, state) {
               if (state.loading) return buildNovelItemShimmer();
-              if (state.novels != null)
-                return buildNovelItem(context, state.novels);
-              return Center(
-                child: Text("Что-то пошло не так D:"),
-              );
+              if (state.novels != null) return buildNovelItem(context, state.novels);
+              return Center(child: Text("Что-то пошло не так D:"));
             },
           ),
         ],
@@ -64,8 +62,7 @@ class _NovelsPageState extends State<NovelsPage> {
     );
   }
 
-  Widget buildNovelItem(BuildContext context, List<NovelsData>? novels) =>
-      Expanded(
+  Widget buildNovelItem(BuildContext context, List<NovelsData>? novels) => Expanded(
         child: LoaderWidget(
           indicatorColor: Color(0xFF9915d1),
           boxSize: 150,
@@ -76,11 +73,10 @@ class _NovelsPageState extends State<NovelsPage> {
           },
           child: GridView.builder(
             itemCount: novels!.length,
-            gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
             itemBuilder: (context, index) => Container(
               margin: EdgeInsets.only(
-                top: index == 0 && index == 1 ? 0 : 8,
+                top: 8,
                 left: index % 2 == 0 ? 8 : 8,
                 right: index % 2 == 0 ? 0 : 8,
                 bottom: 8,
@@ -139,19 +135,11 @@ class _NovelsPageState extends State<NovelsPage> {
                               ),
                               child: Row(
                                 children: [
-                                  Icon(
-                                    Icons.star,
-                                    size: 14,
-                                    color: Colors.white,
-                                  ),
+                                  Icon(Icons.star, size: 14, color: Colors.white),
                                   SizedBox(width: 2),
                                   Text(
                                     novels[index].rating.toString(),
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
                                   ),
                                 ],
                               ),
@@ -172,20 +160,12 @@ class _NovelsPageState extends State<NovelsPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      novels[index].localizedName.length > 1
-                                          ? novels[index].localizedName
-                                          : "no name",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
+                                      novels[index].localizedName.length > 1 ? novels[index].localizedName : "no name",
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                                     ),
                                     Text(
                                       novels[index].originalName,
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: Color(0xFF263238),
-                                      ),
+                                      style: TextStyle(fontSize: 10, color: Color(0xFF263238)),
                                     ),
                                   ],
                                 ),
@@ -206,8 +186,7 @@ class _NovelsPageState extends State<NovelsPage> {
   Widget buildNovelItemShimmer() => Expanded(
         child: GridView.builder(
           itemCount: 14,
-          gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           padding: EdgeInsets.all(0),
           itemBuilder: (context, index) => Card(
             margin: EdgeInsets.only(
@@ -216,8 +195,7 @@ class _NovelsPageState extends State<NovelsPage> {
               right: index % 2 == 0 ? 0 : 8,
               bottom: index == 13 && index == 12 ? 8 : 0,
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8))),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
             child: Container(
               height: 100,
               child: Column(
