@@ -69,7 +69,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               SizedBox(height: 8),
-              settingsItem(
+              tooltipSettingsItem(
                 name: "Темный режим",
                 tooltip: 'Если включено, меняет все оформление приложения в темные тона.',
                 iconAvatar: Icon(Icons.dark_mode_rounded, color: Colors.white),
@@ -81,7 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               Divider(height: 0, thickness: 2),
-              settingsItem(
+              tooltipSettingsItem(
                 name: "Уведомлять о новостях",
                 tooltip: 'Присылает пуш-уведомление, когда выходит новость.',
                 iconAvatar: Icon(Icons.receipt_long_rounded, color: Colors.white),
@@ -93,7 +93,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               Divider(height: 0, thickness: 2),
-              settingsItem(
+              tooltipSettingsItem(
                 name: "Уведомлять о новеллах",
                 tooltip: 'Присылает пуш-уведомление, когда добавляется новелла.',
                 iconAvatar: Icon(Icons.auto_stories_rounded, color: Colors.white),
@@ -105,7 +105,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               Divider(height: 0, thickness: 2),
-              settingsItem(
+              tooltipSettingsItem(
                 name: "Уведомлять о обновлениях",
                 tooltip: 'Присылает пуш-уведомление, когда необходимо обновить приложение.',
                 iconAvatar: Icon(Icons.now_widgets_rounded, color: Colors.white),
@@ -124,7 +124,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget settingsItem({
+  Widget tooltipSettingsItem({
     required String name,
     required Icon iconAvatar,
     String tooltip = '',
@@ -135,21 +135,35 @@ class _SettingsPageState extends State<SettingsPage> {
       message: tooltip,
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
+      child: settingsItem(
+        iconAvatar: iconAvatar,
+        name: name,
+        trailing: trailing,
+        colorAvatar: colorAvatar,
+      ),
+    );
+  }
+
+  Widget settingsItem({
+    required String name,
+    required Icon iconAvatar,
+    Widget trailing = const SizedBox(),
+    Color colorAvatar = Colors.black,
+  }) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ListTile(
+        title: Text(name, style: TextStyle(fontSize: 16, color: Colors.black)),
+        leading: Container(
+          margin: EdgeInsets.only(left: 8),
+          child: CircleAvatar(backgroundColor: colorAvatar, child: iconAvatar),
         ),
-        child: ListTile(
-          title: Text(name, style: TextStyle(fontSize: 16, color: Colors.black)),
-          leading: Container(
-            margin: EdgeInsets.only(left: 8),
-            child: CircleAvatar(backgroundColor: colorAvatar, child: iconAvatar),
-          ),
-          trailing: trailing,
-          contentPadding: EdgeInsets.all(0),
-        ),
+        trailing: trailing,
+        contentPadding: EdgeInsets.all(0),
       ),
     );
   }
