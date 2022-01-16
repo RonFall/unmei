@@ -9,7 +9,9 @@ class TextFieldWidget extends StatefulWidget {
   final String hint;
   final String topText;
   final Color textColor;
+  final Color hintTextColor;
   final Color fieldBarColor;
+  final Color fillColor;
   final TextInputAction fieldAction;
   final ValueChanged<String>? onType;
   final GestureTapCallback? onClear;
@@ -23,10 +25,12 @@ class TextFieldWidget extends StatefulWidget {
     this.topText = '',
     this.hint = '',
     this.textColor = Colors.black,
+    this.hintTextColor = Colors.grey,
     this.fieldBarColor = Colors.blue,
+    this.fillColor = const Color(0xFFF4F4F4),
     this.fieldAction = TextInputAction.done,
     this.onType,
-    this.onClear = null,
+    this.onClear,
   }) : super(key: key);
 
   @override
@@ -39,9 +43,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
 
   @override
   void initState() {
+    super.initState();
     controller = widget.controller;
     isHide = widget.hasHideText;
-    super.initState();
   }
 
   @override
@@ -80,7 +84,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                     borderSide: BorderSide(color: widget.fieldBarColor, width: 1),
                   ),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
-                  fillColor: const Color(0xFFF4F4F4),
+                  fillColor: widget.fillColor,
+                  hintStyle: TextStyle(
+                    color: widget.hintTextColor,
+                  ),
                   filled: true,
                   suffixIcon: GestureDetector(
                     onTap: () {

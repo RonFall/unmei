@@ -1,14 +1,14 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:unmei/presentation/page/home_page.dart';
-import 'package:unmei/presentation/theme.dart';
 
 import 'app/app_routes.dart';
+import 'app/presentation/app_themes.dart';
 import 'data/hive_storage.dart';
 import 'logic/bloc/bloc_storage.dart';
+import 'logic/cubit/settings/settings_cubit.dart';
 
 void main() async {
   AppRouter().createRoutes();
@@ -49,18 +49,17 @@ class App extends StatelessWidget {
         }
         return MultiBlocProvider(
           providers: blocList,
-          child: AdaptiveTheme(
-            initial: AdaptiveThemeMode.light,
-            light: lightTheme,
-            dark: darkTheme,
-            builder: (light, dark) => MaterialApp(
-              theme: light,
-              darkTheme: dark,
-              debugShowCheckedModeBanner: false,
-              navigatorKey: AppRouter.seafarer.navigatorKey,  // important
-              onGenerateRoute: AppRouter.seafarer.generator(),
-              home: SafeArea(child: HomePage()),
-            ),
+          child: BlocBuilder<SettingsCubit, SettingsState>(
+            builder: (context, state) {
+              final cubit = context.read<SettingsCubit>();
+              return MaterialApp(
+                theme: appThemeData[cubit.state.theme],
+                debugShowCheckedModeBanner: false,
+                navigatorKey: AppRouter.seafarer.navigatorKey,
+                onGenerateRoute: AppRouter.seafarer.generator(),
+                home: SafeArea(child: HomePage()),
+              );
+            },
           ),
         );
       },

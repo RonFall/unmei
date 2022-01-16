@@ -14,7 +14,7 @@ class NovelsCubit extends HydratedCubit<NovelsState> {
 
   @override
   void onChange(Change<NovelsState> change) {
-    print("NEWS CHANGE: ${change}");
+    print("NOVELS CHANGE: $change");
     super.onChange(change);
   }
 

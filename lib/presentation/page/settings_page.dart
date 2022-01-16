@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:seafarer/seafarer.dart';
 import 'package:unmei/app/app_routes.dart';
+import 'package:unmei/presentation/widget/settings_modal_widget.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -19,16 +20,22 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).bottomAppBarColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(8),
             bottomRight: Radius.circular(8),
           ),
         ),
-        title: Text("Настройки", style: TextStyle(fontSize: 32, color: Colors.black)),
+        title: Text(
+          "Настройки",
+          style: TextStyle(
+            fontSize: 32,
+            color: Theme.of(context).highlightColor,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -48,43 +55,70 @@ class _SettingsPageState extends State<SettingsPage> {
                   );
                 },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
                   overlayColor: MaterialStateProperty.all(Colors.grey[100]),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                  ),
                 ),
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 8),
                   child: ListTile(
                     title: Text(
                       "RonFall",
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).highlightColor,
+                      ),
                     ),
                     subtitle: Text(
                       "Android dev.",
                       style: TextStyle(fontSize: 18, color: Color(0xFF0073FF)),
                     ),
                     leading: SvgPicture.asset('assets/icons/user.svg'),
-                    trailing: Icon(Icons.arrow_forward_ios_rounded),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Theme.of(context).backgroundColor,
+                    ),
                     contentPadding: EdgeInsets.all(0),
                   ),
                 ),
               ),
               SizedBox(height: 8),
-              tooltipSettingsItem(
-                name: "Темный режим",
-                tooltip: 'Если включено, меняет все оформление приложения в темные тона.',
-                iconAvatar: Icon(Icons.dark_mode_rounded, color: Colors.white),
-                colorAvatar: Color(0xFF191919),
-                trailing: Switch(
-                  value: switchNotificationsBtn,
-                  onChanged: (s) {},
-                  activeColor: Color(0xFFeb3838),
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    backgroundColor: Theme.of(context).cardColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
+                      ),
+                    ),
+                    context: context,
+                    builder: (_) {
+                      return SettingsModalWidget();
+                    },
+                  );
+                },
+                child: tooltipSettingsItem(
+                  name: "Выбрать тему",
+                  tooltip:
+                      'Если включено, меняет все оформление приложения в тона выбранной темы.',
+                  iconAvatar: Icon(
+                    Icons.dark_mode_rounded,
+                    color: Colors.white,
+                  ),
+                  colorAvatar: Color(0xFF191919),
                 ),
               ),
-              Divider(height: 0, thickness: 2),
               tooltipSettingsItem(
                 name: "Уведомлять о новостях",
                 tooltip: 'Присылает пуш-уведомление, когда выходит новость.',
-                iconAvatar: Icon(Icons.receipt_long_rounded, color: Colors.white),
+                iconAvatar:
+                    Icon(Icons.receipt_long_rounded, color: Colors.white),
                 colorAvatar: Color(0xFF7AB9FF),
                 trailing: Switch(
                   value: switchNotificationsBtn,
@@ -92,11 +126,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   activeColor: Color(0xFFeb3838),
                 ),
               ),
-              Divider(height: 0, thickness: 2),
               tooltipSettingsItem(
                 name: "Уведомлять о новеллах",
-                tooltip: 'Присылает пуш-уведомление, когда добавляется новелла.',
-                iconAvatar: Icon(Icons.auto_stories_rounded, color: Colors.white),
+                tooltip:
+                    'Присылает пуш-уведомление, когда добавляется новелла.',
+                iconAvatar:
+                    Icon(Icons.auto_stories_rounded, color: Colors.white),
                 colorAvatar: Color(0xFFE864FB),
                 trailing: Switch(
                   value: switchNotificationsBtn,
@@ -104,11 +139,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   activeColor: Color(0xFFeb3838),
                 ),
               ),
-              Divider(height: 0, thickness: 2),
               tooltipSettingsItem(
                 name: "Уведомлять о обновлениях",
-                tooltip: 'Присылает пуш-уведомление, когда необходимо обновить приложение.',
-                iconAvatar: Icon(Icons.now_widgets_rounded, color: Colors.white),
+                tooltip:
+                    'Присылает пуш-уведомление, когда необходимо обновить приложение.',
+                iconAvatar:
+                    Icon(Icons.now_widgets_rounded, color: Colors.white),
                 colorAvatar: Colors.blue,
                 trailing: Switch(
                   value: switchNotificationsBtn,
@@ -153,11 +189,17 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).indicatorColor,
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
-        title: Text(name, style: TextStyle(fontSize: 16, color: Colors.black)),
+        title: Text(
+          name,
+          style: TextStyle(
+            fontSize: 16,
+            color: Theme.of(context).highlightColor,
+          ),
+        ),
         leading: Container(
           margin: EdgeInsets.only(left: 8),
           child: CircleAvatar(backgroundColor: colorAvatar, child: iconAvatar),

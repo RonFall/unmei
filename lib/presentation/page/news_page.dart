@@ -10,32 +10,42 @@ class NewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).bottomAppBarColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(8),
             bottomRight: Radius.circular(8),
           ),
         ),
-        title: Text("Новости", style: TextStyle(fontSize: 32, color: Colors.black)),
+        title: Text(
+          "Новости",
+          style: TextStyle(
+            fontSize: 32,
+            color: Theme.of(context).highlightColor,
+          ),
+        ),
       ),
       body: Column(
         children: [
           SizedBox(height: 16),
           BlocConsumer<NewsCubit, NewsState>(
             listener: (context, state) {
-              if (state.error != null)
+              if (state.error != null) {
                 return showLoginError(context, error: state.error!);
+              }
             },
             builder: (context, state) {
               if (state.loading) return buildNewsItemShimmer();
-              if (state.news != null)
+              if (state.news != null) {
                 return buildNewsItem(context: context, news: state.news);
+              }
               return Center(
-                child: Text("Что-то пошло не так D:",
-                    style: TextStyle(color: Colors.black)),
+                child: Text(
+                  "Что-то пошло не так D:",
+                  style: TextStyle(color: Theme.of(context).highlightColor),
+                ),
               );
             },
           ),
@@ -44,7 +54,10 @@ class NewsPage extends StatelessWidget {
     );
   }
 
-  Widget buildNewsItem({required BuildContext context, required List<NewsData>? news}) {
+  Widget buildNewsItem({
+    required BuildContext context,
+    required List<NewsData>? news,
+  }) {
     var hasOpen = BlocProvider.of<NewsCubit>(context).hasOpen;
     return Expanded(
       child: LoaderWidget(
@@ -72,7 +85,7 @@ class NewsPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
-                color: Colors.white,
+                color: Theme.of(context).cardColor,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black12,
@@ -90,7 +103,7 @@ class NewsPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Theme.of(context).highlightColor,
                     ),
                   ),
                   SizedBox(height: 16),
@@ -98,12 +111,17 @@ class NewsPage extends StatelessWidget {
                     duration: Duration(milliseconds: 500),
                     curve: Curves.easeInBack,
                     child: ConstrainedBox(
-                      constraints: hasOpen ? BoxConstraints() : BoxConstraints(maxHeight: 50.0),
+                      constraints: hasOpen
+                          ? BoxConstraints()
+                          : BoxConstraints(maxHeight: 50.0),
                       child: Text(
                         "${news[index].shortPost}",
                         softWrap: true,
                         overflow: TextOverflow.fade,
-                        style: TextStyle(fontSize: 12, color: Color(0xFF263238)),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).highlightColor,
+                        ),
                       ),
                     ),
                   ),
@@ -118,12 +136,18 @@ class NewsPage extends StatelessWidget {
                         style: ButtonStyle(
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
-                              side: BorderSide(width: 1, color: Color(0xFF0E4DA4)),
-                              borderRadius: BorderRadius.all(Radius.circular(8)),
+                              side: BorderSide(
+                                width: 1,
+                                color: Color(0xFF0E4DA4),
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
                             ),
                           ),
-                          overlayColor: MaterialStateProperty.all(Color(0xFFC7DBFF)),
-                          backgroundColor: MaterialStateProperty.all(Colors.white),
+                          overlayColor: MaterialStateProperty.all(
+                            Color(0xFFC7DBFF),
+                          ),
                         ),
                         child: Text(
                           "Подробнее",
@@ -135,28 +159,36 @@ class NewsPage extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.account_circle, size: 18, color: Colors.black),
+                              Icon(
+                                Icons.account_circle,
+                                size: 18,
+                                color: Theme.of(context).highlightColor,
+                              ),
                               SizedBox(width: 4),
                               Text(
                                 "${news[index].author}",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  color: Colors.black,
+                                  color: Theme.of(context).highlightColor,
                                 ),
                               ),
                             ],
                           ),
                           Row(
                             children: [
-                              Icon(Icons.date_range, size: 18, color: Colors.black),
+                              Icon(
+                                Icons.date_range,
+                                size: 18,
+                                color: Theme.of(context).highlightColor,
+                              ),
                               SizedBox(width: 4),
                               Text(
                                 "${setDateTime(news[index].date)}",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  color: Colors.black,
+                                  color: Theme.of(context).highlightColor,
                                 ),
                               ),
                             ],
@@ -174,45 +206,74 @@ class NewsPage extends StatelessWidget {
     );
   }
 
-  Widget buildNewsItemShimmer() => Expanded(
-        child: ListView.builder(
-          itemCount: 10,
-          padding: EdgeInsets.all(0),
-          itemBuilder: (context, index) => Card(
-            margin: EdgeInsets.only(
-              top: index == 0 ? 0 : 16,
-              left: 16,
-              right: 16,
-              bottom: index == 9 ? 16 : 0,
-            ),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-            child: Container(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  onBoxShim(height: 24, width: 196, radius: 16),
-                  SizedBox(height: 16),
-                  onBoxShim(height: 64, width: 256, radius: 16),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      onBoxShim(height: 48, width: 128, radius: 8),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          onBoxShim(height: 16, width: 96, radius: 16),
-                          SizedBox(height: 8),
-                          onBoxShim(height: 16, width: 128, radius: 16),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+  Widget buildNewsItemShimmer() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: 10,
+        padding: EdgeInsets.all(0),
+        itemBuilder: (context, index) => Card(
+          margin: EdgeInsets.only(
+            top: index == 0 ? 0 : 16,
+            left: 16,
+            right: 16,
+            bottom: index == 9 ? 16 : 0,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                onBoxShim(
+                  context: context,
+                  height: 24,
+                  width: 196,
+                  radius: 16,
+                ),
+                SizedBox(height: 16),
+                onBoxShim(
+                  context: context,
+                  height: 64,
+                  width: 256,
+                  radius: 16,
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    onBoxShim(
+                      context: context,
+                      height: 48,
+                      width: 128,
+                      radius: 8,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        onBoxShim(
+                          context: context,
+                          height: 16,
+                          width: 96,
+                          radius: 16,
+                        ),
+                        SizedBox(height: 8),
+                        onBoxShim(
+                          context: context,
+                          height: 16,
+                          width: 128,
+                          radius: 16,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
-      );
+      ),
+    );
+  }
 }

@@ -15,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(8),
@@ -23,8 +24,8 @@ class _HomePageState extends State<HomePage> {
         child: BottomNavigationBar(
           currentIndex: _selectedIndex,
           items: _navBarsItems(),
-          selectedItemColor: Colors.white,
-          backgroundColor: Color(int.parse(selectedItemParams(choose: "color"))),
+          selectedItemColor: _tabColor(_selectedIndex),
+          backgroundColor: Theme.of(context).bottomAppBarColor,
           onTap: (index) {
             setState(() {
               _selectedIndex = index;
@@ -34,6 +35,15 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _buildScreens().elementAt(_selectedIndex),
     );
+  }
+
+  Color _tabColor(int index) {
+    switch (index) {
+      case 0: return Color(0xFF7AB9FF);
+      case 1: return Color(0xFFE864FB);
+      case 2: return Color(0xFFFB6464);
+      default: return Colors.white;
+    }
   }
 
   String selectedItemParams({String choose = "name"}) {
