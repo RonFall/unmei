@@ -69,7 +69,12 @@ class _NovelsPageState extends State<NovelsPage> {
               if (state.novels != null) {
                 return buildNovelItem(context, state.novels);
               }
-              return Center(child: Text("Что-то пошло не так D:"));
+              return Center(
+                child: Text(
+                  "Что-то пошло не так D:",
+                  style: TextStyle(color: Theme.of(context).highlightColor),
+                ),
+              );
             },
           ),
         ],
