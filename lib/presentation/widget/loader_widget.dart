@@ -13,15 +13,15 @@ class LoaderWidget extends StatefulWidget {
     this.boxSize = 150,
     required this.indicatorColor,
     this.durationAnim = 1,
-    required this.onRefresh
+    required this.onRefresh,
   });
 
   @override
   _LoaderWidgetState createState() => _LoaderWidgetState();
 }
 
-class _LoaderWidgetState extends State<LoaderWidget> with SingleTickerProviderStateMixin {
-
+class _LoaderWidgetState extends State<LoaderWidget>
+    with SingleTickerProviderStateMixin {
   bool _renderCompleteState = false;
 
   final _helper = IndicatorStateHelper();
@@ -44,8 +44,11 @@ class _LoaderWidgetState extends State<LoaderWidget> with SingleTickerProviderSt
               animation: controller,
               builder: (context, _) {
                 _helper.update(controller.state);
-                if (_helper.didStateChange(to: IndicatorState.complete)) _renderCompleteState = true;
-                else if (_helper.didStateChange(to: IndicatorState.idle)) _renderCompleteState = false;
+                if (_helper.didStateChange(to: IndicatorState.complete)) {
+                  _renderCompleteState = true;
+                } else if (_helper.didStateChange(to: IndicatorState.idle)) {
+                  _renderCompleteState = false;
+                }
 
                 final containerHeight = controller.value * widget.boxSize;
 
@@ -63,16 +66,26 @@ class _LoaderWidgetState extends State<LoaderWidget> with SingleTickerProviderSt
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 150),
                         alignment: Alignment.center,
-                        child: _renderCompleteState ? Icon(Icons.check, color: Colors.white) : SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation(Colors.white),
-                            value: controller.isDragging || controller.isArmed ? controller.value.clamp(0.0, 1.0) : null,
-                          ),
-                        ),
-                        decoration: BoxDecoration(color: _renderCompleteState ? widget.indicatorColor : Colors.black,
+                        child: _renderCompleteState
+                            ? Icon(Icons.check, color: Colors.white)
+                            : SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation(
+                                    Colors.white,
+                                  ),
+                                  value: controller.isDragging ||
+                                          controller.isArmed
+                                      ? controller.value.clamp(0.0, 1.0)
+                                      : null,
+                                ),
+                              ),
+                        decoration: BoxDecoration(
+                          color: _renderCompleteState
+                              ? widget.indicatorColor
+                              : Colors.black,
                           shape: BoxShape.circle,
                         ),
                       ),

@@ -5,9 +5,7 @@ import 'package:unmei/app/presentation/app_themes.dart';
 import 'package:unmei/logic/cubit/settings/settings_cubit.dart';
 
 class SettingsModalWidget extends StatelessWidget {
-  const SettingsModalWidget({
-    Key? key,
-  }) : super(key: key);
+  const SettingsModalWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

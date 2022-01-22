@@ -47,7 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ElevatedButton(
                 onPressed: () {
                   AppRouter.seafarer(
-                    "/account_screen",
+                    "/registration_screen",
                     transitionDuration: Duration(milliseconds: 300),
                     transitions: [
                       SeafarerTransition.slide_from_right,
@@ -55,7 +55,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   );
                 },
                 style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all(Colors.grey[100]),
+                  overlayColor: MaterialStateProperty.all(
+                    Theme.of(context).cardColor,
+                  ),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -107,6 +109,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   name: "Выбрать тему",
                   tooltip:
                       'Если включено, меняет все оформление приложения в тона выбранной темы.',
+                  trailing: Padding(
+                    padding: EdgeInsets.only(right: 16),
+                    child: Icon(
+                      Icons.arrow_upward_rounded,
+                      color: Theme.of(context).backgroundColor,
+                    ),
+                  ),
                   iconAvatar: Icon(
                     Icons.dark_mode_rounded,
                     color: Colors.white,
@@ -117,8 +126,10 @@ class _SettingsPageState extends State<SettingsPage> {
               tooltipSettingsItem(
                 name: "Уведомлять о новостях",
                 tooltip: 'Присылает пуш-уведомление, когда выходит новость.',
-                iconAvatar:
-                    Icon(Icons.receipt_long_rounded, color: Colors.white),
+                iconAvatar: Icon(
+                  Icons.receipt_long_rounded,
+                  color: Colors.white,
+                ),
                 colorAvatar: Color(0xFF7AB9FF),
                 trailing: Switch(
                   value: switchNotificationsBtn,
@@ -130,8 +141,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 name: "Уведомлять о новеллах",
                 tooltip:
                     'Присылает пуш-уведомление, когда добавляется новелла.',
-                iconAvatar:
-                    Icon(Icons.auto_stories_rounded, color: Colors.white),
+                iconAvatar: Icon(
+                  Icons.auto_stories_rounded,
+                  color: Colors.white,
+                ),
                 colorAvatar: Color(0xFFE864FB),
                 trailing: Switch(
                   value: switchNotificationsBtn,
@@ -143,8 +156,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 name: "Уведомлять о обновлениях",
                 tooltip:
                     'Присылает пуш-уведомление, когда необходимо обновить приложение.',
-                iconAvatar:
-                    Icon(Icons.now_widgets_rounded, color: Colors.white),
+                iconAvatar: Icon(
+                  Icons.now_widgets_rounded,
+                  color: Colors.white,
+                ),
                 colorAvatar: Colors.blue,
                 trailing: Switch(
                   value: switchNotificationsBtn,

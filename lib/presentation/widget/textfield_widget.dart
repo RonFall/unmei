@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatefulWidget {
   final TextEditingController controller;
+  final TextInputType keyboardType;
   final bool hasHideText;
   final bool showTopText;
   final bool next;
@@ -13,12 +14,14 @@ class TextFieldWidget extends StatefulWidget {
   final Color fieldBarColor;
   final Color fillColor;
   final TextInputAction fieldAction;
+  final Widget? prefixIcon;
   final ValueChanged<String>? onType;
   final GestureTapCallback? onClear;
 
   const TextFieldWidget({
     Key? key,
     required this.controller,
+    this.keyboardType = TextInputType.text,
     this.next = false,
     this.hasHideText = false,
     this.showTopText = false,
@@ -29,6 +32,7 @@ class TextFieldWidget extends StatefulWidget {
     this.fieldBarColor = Colors.blue,
     this.fillColor = const Color(0xFFF4F4F4),
     this.fieldAction = TextInputAction.done,
+    this.prefixIcon,
     this.onType,
     this.onClear,
   }) : super(key: key);
@@ -61,16 +65,22 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.showTopText) Text(widget.topText, style: const TextStyle(color: Colors.white)),
+          if (widget.showTopText)
+            Text(widget.topText, style: const TextStyle(color: Colors.white)),
           const SizedBox(height: 4),
           GestureDetector(
             onDoubleTap: () {
               if (widget.hasHideText) setState(() => isHide = !isHide);
             },
             child: Theme(
-              data: ThemeData(colorScheme: ThemeData().colorScheme.copyWith(primary: widget.fieldBarColor)),
+              data: ThemeData(
+                colorScheme: ThemeData().colorScheme.copyWith(
+                      primary: widget.fieldBarColor,
+                    ),
+              ),
               child: TextFormField(
                 controller: controller,
+                keyboardType: widget.keyboardType,
                 textInputAction: widget.fieldAction,
                 style: TextStyle(color: widget.textColor),
                 cursorColor: widget.fieldBarColor,
@@ -81,20 +91,27 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                   focusColor: widget.fieldBarColor,
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: widget.fieldBarColor, width: 1),
+                    borderSide: BorderSide(
+                      color: widget.fieldBarColor,
+                      width: 1,
+                    ),
                   ),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                   fillColor: widget.fillColor,
-                  hintStyle: TextStyle(
-                    color: widget.hintTextColor,
-                  ),
+                  hintStyle: TextStyle(color: widget.hintTextColor),
                   filled: true,
+                  prefixIcon: widget.prefixIcon,
                   suffixIcon: GestureDetector(
                     onTap: () {
                       controller.clear();
                       if (widget.onClear != null) widget.onClear!();
                     },
-                    child: const Tooltip(message: 'Стереть', child: Icon(Icons.cancel_outlined)),
+                    child: const Tooltip(
+                      message: 'Стереть',
+                      child: Icon(Icons.cancel_outlined),
+                    ),
                   ),
                 ),
                 onChanged: widget.onType,

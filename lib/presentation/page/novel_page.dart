@@ -4,7 +4,6 @@ import 'package:seafarer/seafarer.dart';
 import 'package:unmei/app/app_routes.dart';
 import 'package:unmei/data/model/novels_model.dart';
 import 'package:unmei/logic/cubit/novels/novels_cubit.dart';
-import 'package:unmei/logic/cubit/settings/settings_cubit.dart';
 import 'package:unmei/presentation/widget/loader_widget.dart';
 import 'package:unmei/presentation/widget/textfield_widget.dart';
 import 'package:unmei/presentation/widget/utils_widget.dart';
@@ -83,7 +82,6 @@ class _NovelsPageState extends State<NovelsPage> {
   }
 
   Widget buildNovelItem(BuildContext context, List<NovelsData>? novels) {
-    final cubit = context.read<SettingsCubit>();
     return Expanded(
       child: LoaderWidget(
         indicatorColor: Color(0xFF9915d1),
@@ -143,13 +141,7 @@ class _NovelsPageState extends State<NovelsPage> {
                           decoration: BoxDecoration(
                             border: Border(bottom: BorderSide(width: 1)),
                           ),
-                          child: Image.network(
-                            novels[index].image,
-                            colorBlendMode: cubit.state.theme.index != 0
-                                ? BlendMode.hue
-                                : BlendMode.dst,
-                            color: Theme.of(context).cardColor,
-                          ),
+                          child: Image.network(novels[index].image),
                         ),
                       ),
                       Row(

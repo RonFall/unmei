@@ -43,10 +43,7 @@ void showLoginError(
       ),
       content: Text(
         error,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
     ),
   );

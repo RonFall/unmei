@@ -1,5 +1,5 @@
 import 'package:seafarer/seafarer.dart';
-import 'package:unmei/presentation/page/account_page.dart';
+import 'package:unmei/presentation/screen/registration_screen.dart';
 import 'package:unmei/presentation/page/news_page.dart';
 import 'package:unmei/presentation/page/novel_page.dart';
 import 'package:unmei/presentation/page/settings_page.dart';
@@ -24,10 +24,6 @@ class AppRouter {
       builder: (context, args, params) => NovelsPage(),
     ),
     SeafarerRoute(
-      name: "/account",
-      builder: (context, args, params) => AccountPage(),
-    ),
-    SeafarerRoute(
       name: "/settings",
       builder: (context, args, params) => SettingsPage(),
     ),
@@ -40,6 +36,10 @@ class AppRouter {
       params: [
         SeafarerParam<int>(name: 'index', defaultValue: 0),
       ],
+    ),
+    SeafarerRoute(
+      name: "/registration_screen",
+      builder: (context, args, params) => RegistrationScreen(),
     ),
     SeafarerRoute(
       name: "/account_screen",

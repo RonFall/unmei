@@ -174,7 +174,7 @@ class NovelScreen extends StatelessWidget {
                   context,
                 ),
                 novel.platforms.isEmpty
-                    ? SizedBox()
+                    ? SizedBox.shrink()
                     : textStyle("Платформы: ", "${novel.platforms}", context),
               ],
             ),
