@@ -16,6 +16,7 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 16),
@@ -27,44 +28,68 @@ class AccountScreen extends StatelessWidget {
                 onTap: () => Navigator.of(context).pop(),
                 child: Row(
                   children: [
-                    Icon(Icons.arrow_back, size: 18, color: Colors.black),
+                    Icon(
+                      Icons.arrow_back,
+                      size: 18,
+                      color: Theme.of(context).highlightColor,
+                    ),
                     SizedBox(width: 4),
-                    Text("Назад", style: TextStyle(fontSize: 16, color: Colors.black)),
+                    Text(
+                      "Назад",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).highlightColor,
+                      ),
+                    ),
                   ],
                 ),
               ),
               SizedBox(height: 16),
-              Text("Профиль", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
+              Text(
+                "Профиль",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).highlightColor,
+                ),
+              ),
               Card(
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                color: Theme.of(context).cardColor,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Column(
                       children: [
                         SizedBox(height: 16),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 1),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: SvgPicture.asset("assets/icons/user.svg"),
-                            ),
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 1),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: SvgPicture.asset("assets/icons/user.svg"),
                           ),
                         ),
                         SizedBox(height: 8),
                         Text(
                           "RonFall",
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).highlightColor,
+                          ),
                         ),
                         Text(
                           "Android dev.",
-                          style: TextStyle(fontSize: 18, color: Color(0xFF0073FF)),
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Color(0xFF0073FF),
+                          ),
                         ),
                         SizedBox(height: 16),
                       ],
@@ -73,10 +98,20 @@ class AccountScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
-              Text("Новеллы", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+              Text(
+                "Новеллы",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).highlightColor,
+                ),
+              ),
               Card(
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                color: Theme.of(context).cardColor,
                 child: Column(
                   children: [
                     SizedBox(height: 16),
@@ -84,12 +119,13 @@ class AccountScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: SfCircularChart(series: <CircularSeries>[
-                            // Render pie chart
                             DoughnutSeries<ChartData, double>(
                               dataSource: chartData,
-                              pointColorMapper: (ChartData data, _) => data.color,
+                              pointColorMapper: (ChartData data, _) =>
+                                  data.color,
                               xValueMapper: (ChartData data, _) => data.value,
-                              yValueMapper: (ChartData data, _) => data.sectorValue,
+                              yValueMapper: (ChartData data, _) =>
+                                  data.sectorValue,
                             )
                           ]),
                         ),
@@ -98,11 +134,36 @@ class AccountScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              flagIcon("Запланировано: 1", Icons.assistant_photo, 0xFF399999),
-                              flagIcon("Пройдено: 2", Icons.check, 0xFF339933),
-                              flagIcon("Прохожу: 3", Icons.av_timer, 0xFF993399),
-                              flagIcon("Отложено: 4", Icons.ac_unit, 0xFF51d4ff),
-                              flagIcon("Брошено: 5", Icons.not_interested, 0xFF993333),
+                              flagIcon(
+                                context: context,
+                                n: "Запланировано: ${chartData[0].sectorValue}",
+                                icon: Icons.assistant_photo,
+                                color: 0xFF399999,
+                              ),
+                              flagIcon(
+                                context: context,
+                                n: "Пройдено: ${chartData[1].sectorValue}",
+                                icon: Icons.check,
+                                color: 0xFF339933,
+                              ),
+                              flagIcon(
+                                context: context,
+                                n: "Прохожу: ${chartData[2].sectorValue}",
+                                icon: Icons.av_timer,
+                                color: 0xFF993399,
+                              ),
+                              flagIcon(
+                                context: context,
+                                n: "Отложено: ${chartData[3].sectorValue}",
+                                icon: Icons.ac_unit,
+                                color: 0xFF51d4ff,
+                              ),
+                              flagIcon(
+                                context: context,
+                                n: "Брошено: ${chartData[4].sectorValue}",
+                                icon: Icons.not_interested,
+                                color: 0xFF993333,
+                              ),
                             ],
                           ),
                         ),
@@ -110,12 +171,21 @@ class AccountScreen extends StatelessWidget {
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      color: Colors.grey[200],
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      color: Theme.of(context).indicatorColor,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Весь список", style: TextStyle(fontSize: 18, color: Colors.black)),
+                          Text(
+                            "Весь список",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Theme.of(context).highlightColor,
+                            ),
+                          ),
                           Icon(Icons.keyboard_arrow_down_rounded),
                         ],
                       ),
@@ -131,12 +201,24 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget flagIcon(String n, IconData icon, int color) {
+  Widget flagIcon({
+    required BuildContext context,
+    required String n,
+    required IconData icon,
+    required int color,
+  }) {
     return Row(
       children: [
         Icon(icon, size: 18, color: Color(color)),
         SizedBox(width: 4),
-        Text(n, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black)),
+        Text(
+          n,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).highlightColor,
+          ),
+        ),
       ],
     );
   }
@@ -147,5 +229,9 @@ class ChartData {
   final double sectorValue;
   final Color color;
 
-  ChartData({required this.value, required this.sectorValue, required this.color});
+  ChartData({
+    required this.value,
+    required this.sectorValue,
+    required this.color,
+  });
 }
