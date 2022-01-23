@@ -42,46 +42,48 @@ class _NovelsPageState extends State<NovelsPage> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(height: 8),
-          TextFieldWidget(
-            controller: search,
-            hint: 'Новелла под названием...',
-            textColor: Theme.of(context).highlightColor,
-            fillColor: Theme.of(context).indicatorColor,
-            fieldBarColor: Theme.of(context).progressIndicatorTheme.color!,
-            onType: (text) {
-              context.read<NovelsCubit>().onNovelsLoad(name: text);
-            },
-            onClear: () => context.read<NovelsCubit>().onNovelsLoad(),
-          ),
-          BlocConsumer<NovelsCubit, NovelsState>(
-            listener: (context, state) {
-              if (state.error != null) {
-                return showLoginError(context, error: state.error!);
-              }
-            },
-            builder: (context, state) {
-              if (state.loading) return buildNovelItemShimmer();
-              if (state.novels != null) {
-                return buildNovelItem(context, state.novels);
-              }
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/error.png'),
-                    Text(
-                      "Что-то пошло не так D:",
-                      style: TextStyle(color: Theme.of(context).highlightColor),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(height: 8),
+            TextFieldWidget(
+              controller: search,
+              hint: 'Новелла под названием...',
+              textColor: Theme.of(context).highlightColor,
+              fillColor: Theme.of(context).indicatorColor,
+              fieldBarColor: Theme.of(context).progressIndicatorTheme.color!,
+              onType: (text) {
+                context.read<NovelsCubit>().onNovelsLoad(name: text);
+              },
+              onClear: () => context.read<NovelsCubit>().onNovelsLoad(),
+            ),
+            BlocConsumer<NovelsCubit, NovelsState>(
+              listener: (context, state) {
+                if (state.error != null) {
+                  return showLoginError(context, error: state.error!);
+                }
+              },
+              builder: (context, state) {
+                if (state.loading) return buildNovelItemShimmer();
+                if (state.novels != null) {
+                  return buildNovelItem(context, state.novels);
+                }
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/error.png'),
+                      Text(
+                        "Что-то пошло не так D:",
+                        style: TextStyle(color: Theme.of(context).highlightColor),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

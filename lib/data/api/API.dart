@@ -1,21 +1,8 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:unmei/data/hive_storage.dart';
 import 'package:unmei/data/model/app_model.dart';
-
-var mapKeys = {
-  -1: "Одно из полей пустое!",
-  1: "Неверный логин и/или пароль!",
-  2: 'Проверка ReCaptcha не пройдена!',
-  4: "Нет доступа!",
-  5: "Аккаунт уже активирован! Вы будете перенаправлены на главную через 3 секунды.",
-  6: "Токен истек!",
-  8: "Новый и старый пароли совпадают!",
-  9: "Необходима проверка ReCaptcha",
-  10: "Неверно указан старый E-Mail",
-  11: "Неверно указан старый пароль",
-  100: "Не найдено!",
-};
 
 class API {
   final client = Dio();
@@ -33,8 +20,24 @@ class API {
     );
   }
 
-  Future<T> getNetworkData<T extends DataResponse>(
-      {required T cls, required String type}) async {
+  static final mapKeys = {
+    -1: "Одно из полей пустое!",
+    1: "Неверный логин и/или пароль!",
+    2: 'Проверка ReCaptcha не пройдена!',
+    4: "Нет доступа!",
+    5: "Аккаунт уже активирован! Вы будете перенаправлены на главную через 3 секунды.",
+    6: "Токен истек!",
+    8: "Новый и старый пароли совпадают!",
+    9: "Необходима проверка ReCaptcha",
+    10: "Неверно указан старый E-Mail",
+    11: "Неверно указан старый пароль",
+    100: "Не найдено!",
+  };
+
+  Future<T> getNetworkData<T extends DataResponse>({
+    required T cls,
+    required String type,
+  }) async {
     final response = await client.get(type);
     final completer = new Completer<T>();
     if (response.statusCode == 200) {
@@ -84,51 +87,47 @@ class API {
   //   throw Exception('Failed to load data');
   // }
 
-  // Future onLogin({required String login, required String pass}) async {
-  //   try {
-  //     final Map<String, String> formData = {
-  //       "login": login,
-  //       "password": pass,
-  //     };
-  //     Response response = await client.post('auth/login?auth_type=token', data: formData);
-  //     var respData = response.data;
-  //     if (response.statusCode == 200) {
-  //       print('Response body on 200: $respData');
-  //       return respData;
-  //     } else {
-  //       return respData;
-  //     }
-  //   } on DioError catch (e, s) {
-  //     if (e.response != null) {
-  //       if (e.response!.statusCode == 401) {
-  //         client.interceptors.requestLock.lock();
-  //         client.interceptors.responseLock.lock();
-  //         RequestOptions requestOptions = e.requestOptions;
-  //         var token = await HiveStorage().get('token');
-  //         final opts = Options(method: requestOptions.method);
-  //         client.options.headers["Authorization"] = "Bearer " + token;
-  //         client.options.headers["Accept"] = "*/*";
-  //         client.interceptors.requestLock.unlock();
-  //         client.interceptors.responseLock.unlock();
-  //         final response = await client.request(
-  //           requestOptions.path,
-  //           options: opts,
-  //           cancelToken: requestOptions.cancelToken,
-  //           onReceiveProgress: requestOptions.onReceiveProgress,
-  //           data: requestOptions.data,
-  //           queryParameters: requestOptions.queryParameters,
-  //         );
-  //         return response.data;
-  //       } else {
-  //         return e.response!.data;
-  //       }
-  //     } else {
-  //       return "Request options: ${e.requestOptions}\nError message: ${e.message}";
-  //     }
-  //   } catch (error, stacktrace) {
-  //     return "Exception occurred: $error stackTrace: $stacktrace";
-  //   }
-  // }
+  Future onLogin({required String login, required String pass}) async {
+    try {
+      final Map<String, String> formData = {
+        "login": login,
+        "password": pass,
+      };
+      Response response = await client.post('auth/login?auth_type=token', data: formData);
+      final respData = response.data;
+      if (response.statusCode == 200) {
+        print('Response body on 200: $respData');
+        return respData;
+      } else {
+        return respData;
+      }
+    } on DioError catch (e) {
+      if (e.response != null) {
+        if (e.response!.statusCode == 401) {
+          RequestOptions requestOptions = e.requestOptions;
+          final token = await HiveStorage().get('token');
+          final opts = Options(method: requestOptions.method);
+          client.options.headers["Authorization"] = "Bearer " + token;
+          client.options.headers["Accept"] = "*/*";
+          final response = await client.request(
+            requestOptions.path,
+            options: opts,
+            cancelToken: requestOptions.cancelToken,
+            onReceiveProgress: requestOptions.onReceiveProgress,
+            data: requestOptions.data,
+            queryParameters: requestOptions.queryParameters,
+          );
+          return response.data;
+        } else {
+          return e.response!.data;
+        }
+      } else {
+        return "Request options: ${e.requestOptions}\nError message: ${e.message}";
+      }
+    } catch (error, stacktrace) {
+      return "Exception occurred: $error stackTrace: $stacktrace";
+    }
+  }
 
   String onBodyError(int n) {
     switch (n) {

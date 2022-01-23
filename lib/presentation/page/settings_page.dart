@@ -37,138 +37,140 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: () {
-                  AppRouter.seafarer(
-                    "/registration_screen",
-                    transitionDuration: Duration(milliseconds: 300),
-                    transitions: [
-                      SeafarerTransition.slide_from_right,
-                    ],
-                  );
-                },
-                style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all(
-                    Theme.of(context).cardColor,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    AppRouter.seafarer(
+                      "/registration_screen",
+                      transitionDuration: Duration(milliseconds: 300),
+                      transitions: [
+                        SeafarerTransition.slide_from_right,
+                      ],
+                    );
+                  },
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).cardColor,
+                    ),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                    ),
                   ),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      title: Text(
+                        "RonFall",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).highlightColor,
+                        ),
+                      ),
+                      subtitle: Text(
+                        "Android dev.",
+                        style: TextStyle(fontSize: 18, color: Color(0xFF0073FF)),
+                      ),
+                      leading: SvgPicture.asset('assets/icons/user.svg'),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: Theme.of(context).backgroundColor,
+                      ),
+                      contentPadding: EdgeInsets.all(0),
                     ),
                   ),
                 ),
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  child: ListTile(
-                    title: Text(
-                      "RonFall",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).highlightColor,
+                SizedBox(height: 8),
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      backgroundColor: Theme.of(context).cardColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                      ),
+                      context: context,
+                      builder: (_) {
+                        return SettingsModalWidget();
+                      },
+                    );
+                  },
+                  child: tooltipSettingsItem(
+                    name: "Выбрать тему",
+                    tooltip:
+                        'Если включено, меняет все оформление приложения в тона выбранной темы.',
+                    trailing: Padding(
+                      padding: EdgeInsets.only(right: 16),
+                      child: Icon(
+                        Icons.arrow_upward_rounded,
+                        color: Theme.of(context).backgroundColor,
                       ),
                     ),
-                    subtitle: Text(
-                      "Android dev.",
-                      style: TextStyle(fontSize: 18, color: Color(0xFF0073FF)),
+                    iconAvatar: Icon(
+                      Icons.dark_mode_rounded,
+                      color: Colors.white,
                     ),
-                    leading: SvgPicture.asset('assets/icons/user.svg'),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: Theme.of(context).backgroundColor,
-                    ),
-                    contentPadding: EdgeInsets.all(0),
+                    colorAvatar: Color(0xFF191919),
                   ),
                 ),
-              ),
-              SizedBox(height: 8),
-              GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(
-                    backgroundColor: Theme.of(context).cardColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16),
-                      ),
-                    ),
-                    context: context,
-                    builder: (_) {
-                      return SettingsModalWidget();
-                    },
-                  );
-                },
-                child: tooltipSettingsItem(
-                  name: "Выбрать тему",
-                  tooltip:
-                      'Если включено, меняет все оформление приложения в тона выбранной темы.',
-                  trailing: Padding(
-                    padding: EdgeInsets.only(right: 16),
-                    child: Icon(
-                      Icons.arrow_upward_rounded,
-                      color: Theme.of(context).backgroundColor,
-                    ),
-                  ),
+                tooltipSettingsItem(
+                  name: "Уведомлять о новостях",
+                  tooltip: 'Присылает пуш-уведомление, когда выходит новость.',
                   iconAvatar: Icon(
-                    Icons.dark_mode_rounded,
+                    Icons.receipt_long_rounded,
                     color: Colors.white,
                   ),
-                  colorAvatar: Color(0xFF191919),
+                  colorAvatar: Color(0xFF7AB9FF),
+                  trailing: Switch(
+                    value: switchNotificationsBtn,
+                    onChanged: (s) {},
+                    activeColor: Color(0xFFeb3838),
+                  ),
                 ),
-              ),
-              tooltipSettingsItem(
-                name: "Уведомлять о новостях",
-                tooltip: 'Присылает пуш-уведомление, когда выходит новость.',
-                iconAvatar: Icon(
-                  Icons.receipt_long_rounded,
-                  color: Colors.white,
+                tooltipSettingsItem(
+                  name: "Уведомлять о новеллах",
+                  tooltip:
+                      'Присылает пуш-уведомление, когда добавляется новелла.',
+                  iconAvatar: Icon(
+                    Icons.auto_stories_rounded,
+                    color: Colors.white,
+                  ),
+                  colorAvatar: Color(0xFFE864FB),
+                  trailing: Switch(
+                    value: switchNotificationsBtn,
+                    onChanged: (s) {},
+                    activeColor: Color(0xFFeb3838),
+                  ),
                 ),
-                colorAvatar: Color(0xFF7AB9FF),
-                trailing: Switch(
-                  value: switchNotificationsBtn,
-                  onChanged: (s) {},
-                  activeColor: Color(0xFFeb3838),
+                tooltipSettingsItem(
+                  name: "Уведомлять о обновлениях",
+                  tooltip:
+                      'Присылает пуш-уведомление, когда необходимо обновить приложение.',
+                  iconAvatar: Icon(
+                    Icons.now_widgets_rounded,
+                    color: Colors.white,
+                  ),
+                  colorAvatar: Colors.blue,
+                  trailing: Switch(
+                    value: switchNotificationsBtn,
+                    onChanged: (s) {},
+                    activeColor: Color(0xFFeb3838),
+                  ),
                 ),
-              ),
-              tooltipSettingsItem(
-                name: "Уведомлять о новеллах",
-                tooltip:
-                    'Присылает пуш-уведомление, когда добавляется новелла.',
-                iconAvatar: Icon(
-                  Icons.auto_stories_rounded,
-                  color: Colors.white,
-                ),
-                colorAvatar: Color(0xFFE864FB),
-                trailing: Switch(
-                  value: switchNotificationsBtn,
-                  onChanged: (s) {},
-                  activeColor: Color(0xFFeb3838),
-                ),
-              ),
-              tooltipSettingsItem(
-                name: "Уведомлять о обновлениях",
-                tooltip:
-                    'Присылает пуш-уведомление, когда необходимо обновить приложение.',
-                iconAvatar: Icon(
-                  Icons.now_widgets_rounded,
-                  color: Colors.white,
-                ),
-                colorAvatar: Colors.blue,
-                trailing: Switch(
-                  value: switchNotificationsBtn,
-                  onChanged: (s) {},
-                  activeColor: Color(0xFFeb3838),
-                ),
-              ),
-              SizedBox(height: 16),
-            ],
+                SizedBox(height: 16),
+              ],
+            ),
           ),
         ),
       ),

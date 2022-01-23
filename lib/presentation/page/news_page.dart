@@ -27,33 +27,35 @@ class NewsPage extends StatelessWidget {
           ),
         ),
       ),
-      body: BlocConsumer<NewsCubit, NewsState>(
-        listener: (context, state) {
-          if (state.error != null) {
-            return showLoginError(context, error: state.error!);
-          }
-        },
-        builder: (context, state) {
-          if (state.loading) return buildNewsItemShimmer();
-          if (state.news != null) {
-            return buildNewsItem(context: context, news: state.news);
-          }
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/error.png',
-                  height: MediaQuery.of(context).size.height / 3,
-                ),
-                Text(
-                  "Что-то пошло не так D:",
-                  style: TextStyle(color: Theme.of(context).highlightColor),
-                ),
-              ],
-            ),
-          );
-        },
+      body: SafeArea(
+        child: BlocConsumer<NewsCubit, NewsState>(
+          listener: (context, state) {
+            if (state.error != null) {
+              return showLoginError(context, error: state.error!);
+            }
+          },
+          builder: (context, state) {
+            if (state.loading) return buildNewsItemShimmer();
+            if (state.news != null) {
+              return buildNewsItem(context: context, news: state.news);
+            }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/error.png',
+                    height: MediaQuery.of(context).size.height / 3,
+                  ),
+                  Text(
+                    "Что-то пошло не так D:",
+                    style: TextStyle(color: Theme.of(context).highlightColor),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

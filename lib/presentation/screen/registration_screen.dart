@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unmei/app/utils.dart';
+import 'package:unmei/data/api/API.dart';
 import 'package:unmei/presentation/widget/textfield_widget.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -22,7 +23,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -82,7 +82,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         fieldAction: TextInputAction.next,
                         next: true,
                         fillColor: Theme.of(context).indicatorColor,
-                        fieldBarColor: Theme.of(context).progressIndicatorTheme.color!,
+                        fieldBarColor:
+                            Theme.of(context).progressIndicatorTheme.color!,
                         textColor: Theme.of(context).highlightColor,
                         prefixIcon: Icon(Icons.account_circle_outlined),
                         margin: null,
@@ -95,7 +96,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         fieldAction: TextInputAction.done,
                         hasHideText: true,
                         fillColor: Theme.of(context).indicatorColor,
-                        fieldBarColor: Theme.of(context).progressIndicatorTheme.color!,
+                        fieldBarColor:
+                            Theme.of(context).progressIndicatorTheme.color!,
                         textColor: Theme.of(context).highlightColor,
                         prefixIcon: Icon(Icons.lock_outline_rounded),
                         margin: null,
@@ -134,8 +136,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           Expanded(
                             child: accountButton(
                               onClick: () {
-                                // APIService().onLogin(context, login: loginController.text, pass: passwordController.text);
-                                FocusScope.of(context).unfocus();
+                                API().onLogin(
+                                  login: loginController.text,
+                                  pass: passwordController.text,
+                                );
                               },
                               name: "Войти",
                             ),
