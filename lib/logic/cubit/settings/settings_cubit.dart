@@ -6,6 +6,17 @@ part 'settings_state.dart';
 class SettingsCubit extends HydratedCubit<SettingsState> {
   SettingsCubit() : super(SettingsState());
 
+  @override
+  void onChange(Change<SettingsState> change) {
+    super.onChange(change);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    throw Exception(error);
+  }
+
   void changeTheme(AppTheme theme) {
     emit(SettingsState(theme: theme));
   }

@@ -27,7 +27,7 @@ onRequestException(err) {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("assets/images/no_internet.png", width: 256),
+          Image.asset("assets/images/error.png", width: 256),
           Card(
             child: Container(
               margin: EdgeInsets.all(16),

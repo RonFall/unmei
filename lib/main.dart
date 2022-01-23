@@ -13,11 +13,11 @@ import 'logic/cubit/settings/settings_cubit.dart';
 void main() async {
   AppRouter().createRoutes();
   WidgetsFlutterBinding.ensureInitialized();
-  HydratedBloc.storage = await HydratedStorage.build(
+  await HiveStorage().init();
+  final storage = await HydratedStorage.build(
     storageDirectory: await getTemporaryDirectory(),
   );
-  await HiveStorage().init();
-  runApp(App());
+  HydratedBlocOverrides.runZoned(() => runApp(App()), storage: storage);
 }
 
 class Init {

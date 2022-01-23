@@ -6,10 +6,20 @@ part 'news_state.dart';
 
 class NewsCubit extends Cubit<NewsState> {
   final api = API();
-  bool hasOpen = false;
 
   NewsCubit() : super(NewsState()) {
     loadData();
+  }
+
+  @override
+  void onChange(Change<NewsState> change) {
+    super.onChange(change);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    throw Exception(error);
   }
 
   void loadData() async {
@@ -19,5 +29,13 @@ class NewsCubit extends Cubit<NewsState> {
     }).catchError((error) {
       emit(NewsState(error: error.toString()));
     });
+  }
+
+  void changeOpenState() {
+    if (state.hasPaperOpen) {
+      emit(NewsState(hasPaperOpen: false, news: state.news));
+    } else {
+      emit(NewsState(hasPaperOpen: true, news: state.news));
+    }
   }
 }

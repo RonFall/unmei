@@ -9,6 +9,17 @@ class NovelsItemCubit extends Cubit<NovelsItemState> {
 
   NovelsItemCubit() : super(NovelsItemState());
 
+  @override
+  void onChange(Change<NovelsItemState> change) {
+    super.onChange(change);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    throw Exception(error);
+  }
+
   void getNovel(int index) async {
     emit(NovelsItemState(loading: true));
     api.getNetworkData(cls: NovelsItem(), type: 'novels/$index').then((novels) {
@@ -17,10 +28,4 @@ class NovelsItemCubit extends Cubit<NovelsItemState> {
       emit(NovelsItemState(error: error.toString()));
     });
   }
-
-  // void getNovelGenres() async {
-  //   api.getData('genres').then((resp) {
-  //
-  //   });
-  // }
 }

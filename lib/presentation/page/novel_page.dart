@@ -56,7 +56,6 @@ class _NovelsPageState extends State<NovelsPage> {
             },
             onClear: () => context.read<NovelsCubit>().onNovelsLoad(),
           ),
-          SizedBox(height: 8),
           BlocConsumer<NovelsCubit, NovelsState>(
             listener: (context, state) {
               if (state.error != null) {
@@ -69,9 +68,15 @@ class _NovelsPageState extends State<NovelsPage> {
                 return buildNovelItem(context, state.novels);
               }
               return Center(
-                child: Text(
-                  "Что-то пошло не так D:",
-                  style: TextStyle(color: Theme.of(context).highlightColor),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/error.png'),
+                    Text(
+                      "Что-то пошло не так D:",
+                      style: TextStyle(color: Theme.of(context).highlightColor),
+                    ),
+                  ],
                 ),
               );
             },
@@ -94,15 +99,9 @@ class _NovelsPageState extends State<NovelsPage> {
         child: GridView.builder(
           itemCount: novels!.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-          ),
+              crossAxisCount: 2, mainAxisSpacing: 16, crossAxisSpacing: 16),
+          padding: EdgeInsets.all(16),
           itemBuilder: (context, index) => Container(
-            margin: EdgeInsets.only(
-              top: 8,
-              left: index % 2 == 0 ? 8 : 8,
-              right: index % 2 == 0 ? 0 : 8,
-              bottom: 8,
-            ),
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -228,52 +227,50 @@ class _NovelsPageState extends State<NovelsPage> {
         itemCount: 14,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
         ),
-        padding: EdgeInsets.all(0),
-        itemBuilder: (context, index) => Card(
-          margin: EdgeInsets.only(
-            top: index == 0 && index == 1 ? 0 : 8,
-            left: index % 2 == 0 ? 8 : 8,
-            right: index % 2 == 0 ? 0 : 8,
-            bottom: index == 13 && index == 12 ? 8 : 0,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-          ),
-          child: Container(
-            height: 100,
-            child: Column(
-              children: [
-                Expanded(
-                  child: onBoxShim(
-                    context: context,
-                    margin: EdgeInsets.all(8),
-                    radius: 8,
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      onBoxShim(
-                        context: context,
-                        height: 25,
-                        width: 120,
-                        radius: 16,
-                      ),
-                      onBoxShim(
-                        context: context,
-                        height: 20,
-                        width: 140,
-                        radius: 16,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+        padding: EdgeInsets.all(16),
+        itemBuilder: (context, index) {
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
-          ),
-        ),
+            child: Container(
+              height: 100,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: onBoxShim(
+                      context: context,
+                      margin: EdgeInsets.all(8),
+                      radius: 8,
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        onBoxShim(
+                          context: context,
+                          height: 25,
+                          width: 120,
+                          radius: 16,
+                        ),
+                        onBoxShim(
+                          context: context,
+                          height: 20,
+                          width: 140,
+                          radius: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

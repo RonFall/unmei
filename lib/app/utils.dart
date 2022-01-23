@@ -15,10 +15,6 @@ String setDateTime(String date) {
   return DateFormat("dd.MM.yyyy").format(DateTime.parse(date));
 }
 
-launchURL(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
-  }
+void launchURL(String url) async {
+  if (!await launch(url)) throw 'Could not launch $url';
 }

@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:unmei/data/api/API.dart';
 import 'package:unmei/data/model/novels_model.dart';
@@ -14,8 +13,13 @@ class NovelsCubit extends HydratedCubit<NovelsState> {
 
   @override
   void onChange(Change<NovelsState> change) {
-    print("NOVELS CHANGE: $change");
     super.onChange(change);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    throw Exception(error);
   }
 
   void onNovelsLoad({String name = ''}) async {
