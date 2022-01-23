@@ -23,7 +23,7 @@ class NovelsCubit extends HydratedCubit<NovelsState> {
   }
 
   void onNovelsLoad({String name = ''}) async {
-    if (state.novels == null) emit(NovelsState(loading: true));
+    emit(NovelsState(loading: true));
     api.getNetworkData(cls: Novels(), type: 'novels?q=$name').then((novels) {
       emit(NovelsState(novels: novels.data));
     }).catchError((error) {

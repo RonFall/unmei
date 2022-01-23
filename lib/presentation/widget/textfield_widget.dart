@@ -14,6 +14,7 @@ class TextFieldWidget extends StatefulWidget {
   final Color fieldBarColor;
   final Color fillColor;
   final TextInputAction fieldAction;
+  final EdgeInsets? margin;
   final Widget? prefixIcon;
   final ValueChanged<String>? onType;
   final GestureTapCallback? onClear;
@@ -32,6 +33,7 @@ class TextFieldWidget extends StatefulWidget {
     this.fieldBarColor = Colors.blue,
     this.fillColor = const Color(0xFFF4F4F4),
     this.fieldAction = TextInputAction.done,
+    this.margin = const EdgeInsets.symmetric(horizontal: 16),
     this.prefixIcon,
     this.onType,
     this.onClear,
@@ -61,7 +63,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: widget.margin,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

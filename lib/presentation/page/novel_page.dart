@@ -49,8 +49,8 @@ class _NovelsPageState extends State<NovelsPage> {
             controller: search,
             hint: 'Новелла под названием...',
             textColor: Theme.of(context).highlightColor,
-            fieldBarColor: Color(0xFFE864FB),
             fillColor: Theme.of(context).indicatorColor,
+            fieldBarColor: Theme.of(context).progressIndicatorTheme.color!,
             onType: (text) {
               context.read<NovelsCubit>().onNovelsLoad(name: text);
             },

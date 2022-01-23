@@ -17,7 +17,7 @@ final Map<AppTheme, ThemeData> appThemeData = {
     bottomAppBarColor: Color(0xFFd0d0d0),
     highlightColor: Colors.black,
     progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: Color(0xffcbcbcb),
+      color: Color(0xff646464),
     ),
     colorScheme: ColorScheme.light(
       secondary: Color(0xFFcbcbcb),
@@ -38,7 +38,7 @@ final Map<AppTheme, ThemeData> appThemeData = {
     bottomAppBarColor: Color(0xFF0b0b0b),
     highlightColor: Colors.white,
     progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: Color(0xff383838),
+      color: Color(0xffadadad),
     ),
     colorScheme: ColorScheme.dark(
       secondary: Color(0xFF383838),
@@ -59,7 +59,7 @@ final Map<AppTheme, ThemeData> appThemeData = {
     bottomAppBarColor: Color(0xFF2a0b0b),
     highlightColor: Colors.white,
     progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: Color(0xFF3e0808),
+      color: Color(0xff961616),
     ),
     colorScheme: ColorScheme.dark(
       secondary: Color(0xFF3e0808),
@@ -80,7 +80,7 @@ final Map<AppTheme, ThemeData> appThemeData = {
     bottomAppBarColor: Color(0xFF0b2a0b),
     highlightColor: Colors.white,
     progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: Color(0xff0f3e08),
+      color: Color(0xff229414),
     ),
     colorScheme: ColorScheme.dark(
       secondary: Color(0xFF0f3e08),
@@ -101,7 +101,7 @@ final Map<AppTheme, ThemeData> appThemeData = {
     bottomAppBarColor: Color(0xFF0b0b1a),
     highlightColor: Colors.white,
     progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: Color(0xff080f3e),
+      color: Color(0xff16289b),
     ),
     colorScheme: ColorScheme.dark(
       secondary: Color(0xFF080f3e),
